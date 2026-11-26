@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SNL Archive</title>
+  <meta name="description" content="Welcome to SNL Archive, the ultimate library of laughs for Saturday Night Live fans.">
+  <meta name="theme-color" content="#171717">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <a class="brand" href="#home" id="brand-name" aria-label="SNL Archive home">SNL Archive</a>
+    <nav class="primary-nav" aria-label="Main navigation">
+      <a href="#home">Home</a>
+      <a href="#explore">Explore</a>
+      <a href="#seasons">Seasons</a>
+      <a href="#about">About</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="home" data-view aria-labelledby="tagline">
+      <div class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="live-dot" aria-hidden="true"></span> Welcome to the archive</p>
+          <h1 id="tagline">SNL Archive: The ultimate library of laughs.</h1>
+          <p class="lead" id="pitch">
+            Welcome to SNL Archive, a fan-made place to discover episode spotlights,
+            revisit sketches, and explore sample fan rankings.
+          </p>
+          <div class="hero-actions">
+            <a class="button" href="#featured-episode">This week's episode <span aria-hidden="true">→</span></a>
+            <a class="text-link" href="#explore">Browse the full archive</a>
+          </div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="hero-art-inner">
+            <span class="hero-art-kicker">Your place in the audience</span>
+            <span class="hero-art-title">Laugh.<br>Look back.<br><em>Rank it.</em></span>
+            <span class="hero-art-line"></span>
+            <span class="hero-art-caption">Saturday Night Live · Fan archive</span>
+          </div>
+        </div>
+      </div>
+
+      <nav class="home-section-nav" aria-label="Homepage sections">
+        <a href="#featured-episode">Featured episode</a>
+        <a href="#popular-sketches">Popular sketches</a>
+        <a href="#fan-rankings">Fan rankings</a>
+        <a href="#explore">Explore all topics</a>
+        <a href="#about">About the project</a>
+      </nav>
+
+      <section class="home-section" id="featured-episode" aria-labelledby="featured-episode-heading">
+        <div class="section-heading">
+          <p class="eyebrow">A weekly spotlight</p>
+          <h2 id="featured-episode-heading">Featured episode of the week</h2>
+          <p>A little something to add to your watchlist.</p>
+        </div>
+        <article class="episode-card">
+          <div class="episode-art" aria-hidden="true">
+            <span>Tonight</span>
+            <strong>On the<br>town</strong>
+            <span class="episode-art-rule"></span>
+            <span>One night only</span>
+          </div>
+          <div class="episode-copy">
+            <span class="tag" id="featured-episode-label">Fictional prototype spotlight</span>
+            <h3 id="featured-episode-title">The Midnight Matinee</h3>
+            <p id="featured-episode-description">A neighborhood theater's last screening turns into an unexpected live show when the audience keeps calling for one more encore.</p>
+            <a class="card-link" href="#explore">Explore episode topics <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </section>
+
+      <section class="home-section" id="popular-sketches" aria-labelledby="popular-sketches-heading">
+        <div class="section-heading">
+          <p class="eyebrow">Crowd favorites</p>
+          <h2 id="popular-sketches-heading">Popular sketches</h2>
+          <p>Browse a few playful sample picks, then see how they stack up in the fan ranking.</p>
+        </div>
+        <div class="popular-layout">
+          <div class="grid sketch-grid" id="popular-sketch-grid"></div>
+          <aside class="ranking-panel" id="fan-rankings" aria-labelledby="fan-rankings-heading">
+            <p class="eyebrow">The audience has spoken</p>
+            <h3 id="fan-rankings-heading">Fan rankings</h3>
+            <p class="ranking-note">A fictional demo ranking for this prototype.</p>
+            <ol class="ranking-list" id="fan-ranking-list"></ol>
+            <a class="card-link" href="#explore">Explore more topics <span aria-hidden="true">→</span></a>
+          </aside>
+        </div>
+      </section>
+    </section>
+
+    <section id="explore" data-view hidden aria-labelledby="explore-heading">
+      <div class="page-intro">
+        <p class="eyebrow">Take a look around</p>
+        <h1 id="explore-heading">Explore the archive</h1>
+        <p class="muted">Browse sample topics from the SNL fan archive. These examples are fictional and come from <code>data.js</code>.</p>
+      </div>
+
+      <label class="search">
+        <span>Search</span>
+        <input type="search" id="search-box" placeholder="Type to filter…">
+      </label>
+
+      <p class="muted" id="saved-count"></p>
+      <div class="grid" id="listing-grid" aria-live="polite"></div>
+      <p class="empty" id="empty-message" hidden>Nothing matches your search.</p>
+    </section>
+
+    <section id="seasons" data-view hidden aria-labelledby="seasons-heading">
+      <div class="page-intro">
+        <p class="eyebrow">From the archive</p>
+        <h1 id="seasons-heading">Browse all seasons</h1>
+        <p class="muted">Choose a season to explore its aired episodes. Each episode page includes its original air date and host.</p>
+      </div>
+      <div class="season-grid" id="season-grid" aria-label="Seasons 1 through 52"></div>
+      <p class="source-note">Episode dates and host listings are sourced from <a href="https://www.tvmaze.com/shows/361/saturday-night-live/episodes" target="_blank" rel="noopener noreferrer">TVmaze</a>. Only episodes aired through November 26, 2026 are included.</p>
+    </section>
+
+    <section id="season-page" data-view hidden aria-labelledby="season-title">
+      <a class="back-link" href="#seasons">← All seasons</a>
+      <div class="page-intro">
+        <p class="eyebrow" id="season-episode-count"></p>
+        <h1 id="season-title">Season 1</h1>
+        <p class="muted">Select an episode to see its air date and host.</p>
+      </div>
+      <ol class="episode-list" id="season-episode-list"></ol>
+      <p class="source-note">Episode dates and host listings are sourced from <a href="https://www.tvmaze.com/shows/361/saturday-night-live/episodes" target="_blank" rel="noopener noreferrer">TVmaze</a>.</p>
+    </section>
+
+    <section id="episode-page" data-view hidden aria-labelledby="episode-title">
+      <a class="back-link" id="episode-back-link" href="#season-1">← Back to season</a>
+      <article class="episode-detail">
+        <p class="eyebrow" id="episode-season-label">Season 1 · Episode 1</p>
+        <h1 id="episode-title">October 11, 1975 — George Carlin</h1>
+        <dl class="episode-facts">
+          <div>
+            <dt>Original air date</dt>
+            <dd id="episode-date">October 11, 1975</dd>
+          </div>
+          <div>
+            <dt>Host</dt>
+            <dd id="episode-host">George Carlin</dd>
+          </div>
+        </dl>
+        <p class="source-note">Episode dates and host listings are sourced from <a href="https://www.tvmaze.com/shows/361/saturday-night-live/episodes" target="_blank" rel="noopener noreferrer">TVmaze</a>.</p>
+      </article>
+    </section>
+
+    <section id="about" data-view hidden aria-labelledby="about-heading">
+      <div class="page-intro">
+        <p class="eyebrow">The idea behind the archive</p>
+        <h1 id="about-heading">About SNL Archive</h1>
+        <p class="muted">A fan-made concept for bringing Saturday Night Live memories and conversations together.</p>
+      </div>
+      <div class="about-panel">
+        <div>
+          <h2>Made for the fans who keep watching.</h2>
+          <p>SNL Archive brings Saturday Night Live fans together in one place to discuss and rate sketches, rank favorites, and explore facts about the show.</p>
+          <p>Our goal is to make it easier for fans to discover more about SNL and share what they love about it.</p>
+          <a class="button" href="#explore">Explore the archive <span aria-hidden="true">→</span></a>
+        </div>
+        <aside class="project-note">
+          <span class="project-note-label">A student prototype</span>
+          <p>This site is a class project. Episode dates and hosts are historical listings; sample fan content is fictional. It is not affiliated with SNL.</p>
+        </aside>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <a class="footer-brand" href="#home">SNL Archive</a>
+    <p>Student prototype for BSAD 281 at St. Francis Xavier University. Episode dates and hosts are historical listings; sample fan content is fictional.</p>
+    <nav class="footer-nav" aria-label="Footer navigation">
+      <a href="#home">Home</a>
+      <a href="#explore">Explore</a>
+      <a href="#seasons">Seasons</a>
+      <a href="#about">About</a>
+    </nav>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="episodes.js"></script>
+  <script src="episodes.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
