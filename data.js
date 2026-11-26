@@ -12,9 +12,33 @@
 
 const STARTUP = {
   name: "SNL Archive",
-  tagline: "The fan-powered home for everything Saturday Night Live.",
-  pitch: "SNL fans can discuss and rate sketches, rank their favorites, and find show facts in one shared archive instead of piecing it together across the web."
+  tagline: "SNL Archive: The ultimate library of laughs.",
+  pitch: "Welcome to SNL Archive, a fan-made place to discover episode spotlights, revisit sketches, and explore sample fan rankings."
 };
+
+const FEATURED_EPISODE = {
+  label: "Fictional prototype spotlight",
+  title: "The Midnight Matinee",
+  description: "A neighborhood theater's last screening turns into an unexpected live show when the audience keeps calling for one more encore."
+};
+
+const POPULAR_SKETCHES = [
+  {
+    rank: 1,
+    title: "The 2 A.M. Bodega",
+    description: "A night-shift shopkeeper tries to keep up with increasingly unusual customers."
+  },
+  {
+    rank: 2,
+    title: "Subway Small Talk",
+    description: "Two strangers' polite conversation takes a wild turn before the next stop."
+  },
+  {
+    rank: 3,
+    title: "The Last Train Home",
+    description: "A group of commuters make a bold plan when the train is delayed again."
+  }
+];
 
 const LISTINGS = [
   { id: 1, name: "Sketch discussions", category: "Community", description: "Share reactions and join conversations about memorable SNL sketches." },

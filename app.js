@@ -41,16 +41,61 @@
   document.getElementById("tagline").textContent = STARTUP.tagline;
   document.getElementById("pitch").textContent = STARTUP.pitch;
 
+  document.getElementById("featured-episode-label").textContent = FEATURED_EPISODE.label;
+  document.getElementById("featured-episode-title").textContent = FEATURED_EPISODE.title;
+  document.getElementById("featured-episode-description").textContent = FEATURED_EPISODE.description;
+
+  const popularSketchGrid = document.getElementById("popular-sketch-grid");
+  const fanRankingList = document.getElementById("fan-ranking-list");
+
+  function makeSketchCard(sketch) {
+    const card = document.createElement("article");
+    card.className = "card sketch-card";
+
+    const tag = document.createElement("span");
+    tag.className = "tag";
+    tag.textContent = "Fan pick #" + sketch.rank;
+
+    const title = document.createElement("h3");
+    title.textContent = sketch.title;
+
+    const description = document.createElement("p");
+    description.textContent = sketch.description;
+
+    card.append(tag, title, description);
+    return card;
+  }
+
+  function makeRankingItem(sketch) {
+    const item = document.createElement("li");
+
+    const rank = document.createElement("span");
+    rank.className = "ranking-number";
+    rank.textContent = "#" + sketch.rank;
+
+    const title = document.createElement("span");
+    title.textContent = sketch.title;
+
+    item.append(rank, title);
+    return item;
+  }
+
+  popularSketchGrid.replaceChildren.apply(popularSketchGrid, POPULAR_SKETCHES.map(makeSketchCard));
+  fanRankingList.replaceChildren.apply(fanRankingList, POPULAR_SKETCHES.map(makeRankingItem));
+
   // ----------------------------------------------------------
   // 3. Views: show one section at a time, based on the #link in the address bar.
   // ----------------------------------------------------------
   function showView() {
     const requested = (window.location.hash || "#home").slice(1);
     const views = document.querySelectorAll("[data-view]");
-    const exists = Array.prototype.some.call(views, function (view) {
+    const matchingView = Array.prototype.find.call(views, function (view) {
       return view.id === requested;
     });
-    const current = exists ? requested : "home";
+    const home = document.getElementById("home");
+    const sectionTarget = !matchingView && document.getElementById(requested);
+    const homeSectionTarget = sectionTarget && home.contains(sectionTarget) ? sectionTarget : null;
+    const current = matchingView ? requested : "home";
 
     views.forEach(function (view) {
       view.hidden = view.id !== current;
@@ -64,7 +109,11 @@
       }
     });
 
-    window.scrollTo(0, 0);
+    if (homeSectionTarget) {
+      homeSectionTarget.scrollIntoView();
+    } else {
+      window.scrollTo(0, 0);
+    }
   }
 
   window.addEventListener("hashchange", showView);
