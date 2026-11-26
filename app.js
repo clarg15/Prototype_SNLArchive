@@ -1,7 +1,7 @@
 // ============================================================
 // app.js — what your site DOES.
 // Plain JavaScript, no libraries, no installs.
-// It uses sample content from data.js and episode listings from episodes.js.
+// It uses sample content from data.js, episode listings from episodes.js, and cast highlights from cast.js.
 // ============================================================
 
 (function () {
@@ -216,6 +216,7 @@
 
   const popularSketchGrid = document.getElementById("popular-sketch-grid");
   const fanRankingList = document.getElementById("fan-ranking-list");
+  const castGrid = document.getElementById("cast-grid");
 
   function makeSketchCard(sketch) {
     const card = document.createElement("article");
@@ -249,8 +250,40 @@
     return item;
   }
 
+  function makeCastCard(member) {
+    const card = document.createElement("article");
+    card.className = "card cast-card";
+
+    const name = document.createElement("h2");
+    name.textContent = member.name;
+
+    const tenure = document.createElement("p");
+    tenure.className = "cast-tenure";
+    tenure.textContent = "Years: " + member.years + " · " + member.totalSeasons +
+      " season" + (member.totalSeasons === 1 ? "" : "s");
+
+    const charactersHeading = document.createElement("h3");
+    charactersHeading.textContent = "Memorable characters & roles";
+
+    const characters = document.createElement("ul");
+    characters.className = "cast-character-list";
+    member.characters.forEach(function (character) {
+      const item = document.createElement("li");
+      const characterName = document.createElement("strong");
+      characterName.textContent = character.name;
+      const description = document.createElement("span");
+      description.textContent = character.description;
+      item.append(characterName, description);
+      characters.append(item);
+    });
+
+    card.append(name, tenure, charactersHeading, characters);
+    return card;
+  }
+
   popularSketchGrid.replaceChildren.apply(popularSketchGrid, POPULAR_SKETCHES.map(makeSketchCard));
   fanRankingList.replaceChildren.apply(fanRankingList, POPULAR_SKETCHES.map(makeRankingItem));
+  castGrid.replaceChildren.apply(castGrid, CAST_MEMBERS.map(makeCastCard));
 
   // ----------------------------------------------------------
   // 3. Views: show one section at a time, based on the #link in the address bar.
@@ -287,6 +320,8 @@
     } else if (current === "episodes") {
       renderEpisodeDatabase();
       document.title = "Episode Guide | " + STARTUP.name;
+    } else if (current === "cast") {
+      document.title = "Cast Members | " + STARTUP.name;
     } else {
       document.title = STARTUP.name;
     }
