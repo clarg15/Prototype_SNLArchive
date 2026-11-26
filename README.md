@@ -136,7 +136,7 @@ That link is your live site. Every commit updates it automatically within a few 
 | `index.html` | The structure and text of your site |
 | `styles.css` | How it looks: colours, fonts, spacing |
 | `data.js` | Fake sample content for the homepage and Explore page |
-| `episodes.js` | Aired episode dates and hosts for seasons 1–52, sourced from TVmaze |
+| `episodes.js` | Aired episode numbers, dates, hosts, and musical guests for seasons 1–52; compiled from Wikipedia episode tables, with TVmaze entries for three SNL at Home broadcasts |
 | `app.js` | What the site *does* when people click things |
 | `project-notes/PROJECT_LOG.md` | Your team's record of prompts, problems and decisions |
 | `project-notes/BUSINESS_CASE.md` | The business reasoning behind your prototype |

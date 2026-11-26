@@ -16,6 +16,7 @@
       <a href="#home">Home</a>
       <a href="#explore">Explore</a>
       <a href="#seasons">Seasons</a>
+      <a href="#episodes">Episodes</a>
       <a href="#about">About</a>
     </nav>
   </header>
@@ -50,6 +51,7 @@
         <a href="#popular-sketches">Popular sketches</a>
         <a href="#fan-rankings">Fan rankings</a>
         <a href="#explore">Explore all topics</a>
+        <a href="#episodes">Search episodes</a>
         <a href="#about">About the project</a>
       </nav>
 
@@ -115,10 +117,57 @@
       <div class="page-intro">
         <p class="eyebrow">From the archive</p>
         <h1 id="seasons-heading">Browse all seasons</h1>
-        <p class="muted">Choose a season to explore its aired episodes. Each episode page includes its original air date and host.</p>
+        <p class="muted">Choose a season to explore its aired episodes, or <a href="#episodes">search and filter the full episode guide</a>.</p>
       </div>
       <div class="season-grid" id="season-grid" aria-label="Seasons 1 through 52"></div>
-      <p class="source-note">Episode dates and host listings are sourced from <a href="https://www.tvmaze.com/shows/361/saturday-night-live/episodes" target="_blank" rel="noopener noreferrer">TVmaze</a>. Only episodes aired through November 26, 2026 are included.</p>
+      <p class="source-note">Episode records are compiled from the <a href="https://en.wikipedia.org/wiki/List_of_Saturday_Night_Live_episodes_(seasons_1%E2%80%9330)" target="_blank" rel="noopener noreferrer">Wikipedia episode tables for seasons 1–30</a> and <a href="https://en.wikipedia.org/wiki/List_of_Saturday_Night_Live_episodes_(season_31%E2%80%93present)" target="_blank" rel="noopener noreferrer">seasons 31–present</a>, with <a href="https://www.tvmaze.com/shows/361/saturday-night-live/episodes" target="_blank" rel="noopener noreferrer">TVmaze</a> entries for three SNL at Home episodes. Only episodes aired through November 26, 2026 are included.</p>
+    </section>
+
+    <section id="episodes" data-view hidden aria-labelledby="episodes-heading">
+      <div class="page-intro">
+        <p class="eyebrow">Search the archive</p>
+        <h1 id="episodes-heading">Episode guide</h1>
+        <p class="muted">Search by host, musical guest, air date, season, or episode number. Narrow results by season or original air-date range.</p>
+      </div>
+
+      <div class="episode-filter-grid">
+        <label>
+          <span>Search episodes</span>
+          <input type="search" id="episode-search-box" placeholder="Host, guest, date, season, or number">
+        </label>
+        <label>
+          <span>Season</span>
+          <select id="episode-season-filter">
+            <option value="">All seasons</option>
+          </select>
+        </label>
+        <label>
+          <span>Air date from</span>
+          <input type="date" id="episode-date-from">
+        </label>
+        <label>
+          <span>Air date to</span>
+          <input type="date" id="episode-date-to">
+        </label>
+      </div>
+
+      <p class="muted episode-result-count" id="episode-result-count" aria-live="polite"></p>
+      <div class="episode-table-wrap">
+        <table class="episode-table">
+          <thead>
+            <tr>
+              <th scope="col">Season</th>
+              <th scope="col">Episode</th>
+              <th scope="col">Host</th>
+              <th scope="col">Musical guest</th>
+              <th scope="col">Original air date</th>
+            </tr>
+          </thead>
+          <tbody id="episode-database-body"></tbody>
+        </table>
+      </div>
+      <p class="empty" id="episode-empty-message" hidden>No episodes match those search and filter settings.</p>
+      <p class="source-note">Regular episode records are from the <a href="https://en.wikipedia.org/wiki/List_of_Saturday_Night_Live_episodes_(seasons_1%E2%80%9330)" target="_blank" rel="noopener noreferrer">Wikipedia episode tables for seasons 1–30</a> and <a href="https://en.wikipedia.org/wiki/List_of_Saturday_Night_Live_episodes_(season_31%E2%80%93present)" target="_blank" rel="noopener noreferrer">seasons 31–present</a>. The three SNL at Home episodes not listed there are retained from <a href="https://www.tvmaze.com/shows/361/saturday-night-live/episodes" target="_blank" rel="noopener noreferrer">TVmaze</a>; their musical guest is marked “Not listed.” Episodes aired through November 26, 2026 are included.</p>
     </section>
 
     <section id="season-page" data-view hidden aria-labelledby="season-title">
@@ -126,10 +175,10 @@
       <div class="page-intro">
         <p class="eyebrow" id="season-episode-count"></p>
         <h1 id="season-title">Season 1</h1>
-        <p class="muted">Select an episode to see its air date and host.</p>
+        <p class="muted">Select an episode to see its host, musical guest, and original air date.</p>
       </div>
       <ol class="episode-list" id="season-episode-list"></ol>
-      <p class="source-note">Episode dates and host listings are sourced from <a href="https://www.tvmaze.com/shows/361/saturday-night-live/episodes" target="_blank" rel="noopener noreferrer">TVmaze</a>.</p>
+      <p class="source-note">Episode records are compiled from the <a href="https://en.wikipedia.org/wiki/List_of_Saturday_Night_Live_episodes_(seasons_1%E2%80%9330)" target="_blank" rel="noopener noreferrer">Wikipedia episode tables for seasons 1–30</a> and <a href="https://en.wikipedia.org/wiki/List_of_Saturday_Night_Live_episodes_(season_31%E2%80%93present)" target="_blank" rel="noopener noreferrer">seasons 31–present</a>, with <a href="https://www.tvmaze.com/shows/361/saturday-night-live/episodes" target="_blank" rel="noopener noreferrer">TVmaze</a> entries for three SNL at Home episodes.</p>
     </section>
 
     <section id="episode-page" data-view hidden aria-labelledby="episode-title">
@@ -146,8 +195,12 @@
             <dt>Host</dt>
             <dd id="episode-host">George Carlin</dd>
           </div>
+          <div>
+            <dt>Musical guest</dt>
+            <dd id="episode-music-guest">Janis Ian &amp; Billy Preston</dd>
+          </div>
         </dl>
-        <p class="source-note">Episode dates and host listings are sourced from <a href="https://www.tvmaze.com/shows/361/saturday-night-live/episodes" target="_blank" rel="noopener noreferrer">TVmaze</a>.</p>
+        <p class="source-note">Episode records are compiled from the <a href="https://en.wikipedia.org/wiki/List_of_Saturday_Night_Live_episodes_(seasons_1%E2%80%9330)" target="_blank" rel="noopener noreferrer">Wikipedia episode tables for seasons 1–30</a> and <a href="https://en.wikipedia.org/wiki/List_of_Saturday_Night_Live_episodes_(season_31%E2%80%93present)" target="_blank" rel="noopener noreferrer">seasons 31–present</a>, with <a href="https://www.tvmaze.com/shows/361/saturday-night-live/episodes" target="_blank" rel="noopener noreferrer">TVmaze</a> entries for three SNL at Home episodes.</p>
       </article>
     </section>
 
@@ -166,7 +219,7 @@
         </div>
         <aside class="project-note">
           <span class="project-note-label">A student prototype</span>
-          <p>This site is a class project. Episode dates and hosts are historical listings; sample fan content is fictional. It is not affiliated with SNL.</p>
+          <p>This site is a class project. Episode dates, hosts, and musical guests are historical listings; sample fan content is fictional. It is not affiliated with SNL.</p>
         </aside>
       </div>
     </section>
@@ -175,17 +228,17 @@
 
   <footer class="site-footer">
     <a class="footer-brand" href="#home">SNL Archive</a>
-    <p>Student prototype for BSAD 281 at St. Francis Xavier University. Episode dates and hosts are historical listings; sample fan content is fictional.</p>
+    <p>Student prototype for BSAD 281 at St. Francis Xavier University. Episode dates, hosts, and musical guests are historical listings; sample fan content is fictional.</p>
     <nav class="footer-nav" aria-label="Footer navigation">
       <a href="#home">Home</a>
       <a href="#explore">Explore</a>
       <a href="#seasons">Seasons</a>
+      <a href="#episodes">Episodes</a>
       <a href="#about">About</a>
     </nav>
   </footer>
 
   <script src="data.js"></script>
-  <script src="episodes.js"></script>
   <script src="episodes.js"></script>
   <script src="app.js"></script>
 </body>

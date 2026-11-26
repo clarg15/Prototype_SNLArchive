@@ -557,6 +557,70 @@ h1, h2, h3 {
   list-style: none;
 }
 
+.episode-filter-grid {
+  display: grid;
+  grid-template-columns: minmax(240px, 2fr) repeat(3, minmax(145px, 1fr));
+  gap: 12px;
+  margin: 22px 0 12px;
+}
+
+.episode-filter-grid label { display: block; }
+
+.episode-filter-grid label span {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 0.9rem;
+  font-weight: 750;
+}
+
+.episode-filter-grid input,
+.episode-filter-grid select {
+  width: 100%;
+  min-height: 46px;
+  padding: 9px 12px;
+  border: 1px solid #d5cfc4;
+  border-radius: 9px;
+  color: var(--ink);
+  background: var(--surface);
+  font: inherit;
+}
+
+.episode-result-count { min-height: 24px; font-size: 0.9rem; }
+
+.episode-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.episode-table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.episode-table th,
+.episode-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+.episode-table th {
+  color: #fffefa;
+  background: var(--night);
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.episode-table tbody tr:nth-child(even) { background: #faf8f2; }
+.episode-table tbody tr:last-child td { border-bottom: 0; }
+.episode-table a { color: var(--accent-dark); font-weight: 750; text-decoration: none; }
+.episode-table a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
 .episode-link {
   display: block;
   height: 100%;
@@ -672,6 +736,7 @@ h1, h2, h3 {
   .hero-art { min-height: 260px; padding: 8px; }
   .hero-art-inner { min-height: 250px; padding: 24px; }
   .episode-card { grid-template-columns: minmax(180px, 0.7fr) minmax(0, 1.3fr); gap: 25px; }
+  .episode-filter-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .popular-layout { grid-template-columns: 1fr; }
   .sketch-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
   .site-footer { grid-template-columns: 1fr auto; }
@@ -696,6 +761,7 @@ h1, h2, h3 {
   .home-section-nav a { padding: 7px 10px; font-size: 0.78rem; }
   .episode-card { grid-template-columns: 1fr; }
   .episode-art { min-height: 205px; }
+  .episode-filter-grid { grid-template-columns: 1fr; }
   .sketch-grid { grid-template-columns: 1fr; }
   .about-panel { grid-template-columns: 1fr; gap: 25px; padding: 25px; }
   .site-footer { grid-template-columns: 1fr; gap: 12px; padding: 20px 16px; }
