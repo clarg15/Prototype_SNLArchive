@@ -17,7 +17,7 @@
       <a href="#explore">Explore</a>
       <a href="#seasons">Seasons</a>
       <a href="#episodes">Episodes</a>
-      <a href="#cast">Cast</a>
+      <a href="#cast">Cast &amp; writers</a>
       <a href="#about">About</a>
     </nav>
   </header>
@@ -53,7 +53,7 @@
         <a href="#fan-rankings">Fan rankings</a>
         <a href="#explore">Explore all topics</a>
         <a href="#episodes">Search episodes</a>
-        <a href="#cast">Cast members</a>
+        <a href="#cast">Cast &amp; writers</a>
         <a href="#about">About the project</a>
       </nav>
 
@@ -174,12 +174,46 @@
 
     <section id="cast" data-view hidden aria-labelledby="cast-heading">
       <div class="page-intro">
-        <p class="eyebrow">The performers behind the characters</p>
-        <h1 id="cast-heading">SNL cast members</h1>
-        <p class="muted">Explore a curated selection of cast members across eras, their years and season counts on the show, and recognizable recurring characters or signature impressions.</p>
+        <p class="eyebrow">Performers and writers across the years</p>
+        <h1 id="cast-heading">Cast &amp; writers archive</h1>
+        <p class="muted">Search the complete cast roster and season-by-season writing credits. Filter by role or season to find people who worked on the show.</p>
       </div>
-      <div class="grid cast-grid" id="cast-grid"></div>
-      <p class="source-note">This is a curated fan guide, not a complete cast list or official popularity ranking. Tenure is based on the <a href="https://en.wikipedia.org/wiki/List_of_Saturday_Night_Live_cast_members" target="_blank" rel="noopener noreferrer">SNL cast-member list</a>; character associations are cross-referenced with the <a href="https://en.wikipedia.org/wiki/List_of_recurring_Saturday_Night_Live_characters_and_sketches_by_cast_member" target="_blank" rel="noopener noreferrer">recurring characters and sketches by cast member</a>.</p>
+      <div class="people-filter-grid">
+        <label>
+          <span>Search names or seasons</span>
+          <input type="search" id="people-search-box" placeholder="Search cast members and writers">
+        </label>
+        <label>
+          <span>Role</span>
+          <select id="people-role-filter">
+            <option value="">All roles</option>
+            <option value="cast">Cast members</option>
+            <option value="writer">Writers</option>
+          </select>
+        </label>
+        <label>
+          <span>Season</span>
+          <select id="people-season-filter">
+            <option value="">All seasons</option>
+          </select>
+        </label>
+      </div>
+      <p class="muted episode-result-count" id="people-result-count" aria-live="polite"></p>
+      <div class="episode-table-wrap">
+        <table class="episode-table people-table">
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Role</th>
+              <th scope="col">Cast seasons</th>
+              <th scope="col">Writer seasons</th>
+            </tr>
+          </thead>
+          <tbody id="people-database-body"></tbody>
+        </table>
+      </div>
+      <p class="empty" id="people-empty-message" hidden>No people match those search and filter settings.</p>
+      <p class="source-note">This static snapshot was compiled November 26, 2026. Cast names and tenure are based on the <a href="https://en.wikipedia.org/wiki/List_of_Saturday_Night_Live_cast_members" target="_blank" rel="noopener noreferrer">SNL cast-member list</a>; writer credits are listed by season in the <a href="https://en.wikipedia.org/wiki/List_of_Saturday_Night_Live_writers" target="_blank" rel="noopener noreferrer">SNL writers list</a>. Writer seasons reflect credited seasons; cast season ranges are mapped from reported start and total-season data.</p>
     </section>
 
     <section id="season-page" data-view hidden aria-labelledby="season-title">
@@ -246,14 +280,14 @@
       <a href="#explore">Explore</a>
       <a href="#seasons">Seasons</a>
       <a href="#episodes">Episodes</a>
-      <a href="#cast">Cast</a>
+      <a href="#cast">Cast &amp; writers</a>
       <a href="#about">About</a>
     </nav>
   </footer>
 
   <script src="data.js"></script>
   <script src="episodes.js"></script>
-  <script src="cast.js"></script>
+  <script src="people.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
