@@ -53,7 +53,32 @@
   const episodeSeasonLabel = document.getElementById("episode-season-label");
   const episodeDate = document.getElementById("episode-date");
   const episodeHost = document.getElementById("episode-host");
+  const episodeMusicGuest = document.getElementById("episode-music-guest");
   const episodeBackLink = document.getElementById("episode-back-link");
+  const episodeDatabaseBody = document.getElementById("episode-database-body");
+  const episodeSearchBox = document.getElementById("episode-search-box");
+  const episodeSeasonFilter = document.getElementById("episode-season-filter");
+  const episodeDateFrom = document.getElementById("episode-date-from");
+  const episodeDateTo = document.getElementById("episode-date-to");
+  const episodeResultCount = document.getElementById("episode-result-count");
+  const episodeEmptyMessage = document.getElementById("episode-empty-message");
+  const allEpisodes = [];
+
+  Object.keys(SEASON_EPISODES).forEach(function (season) {
+    SEASON_EPISODES[season].forEach(function (episode) {
+      allEpisodes.push({
+        season: Number(season),
+        number: episode.number,
+        date: episode.date,
+        host: episode.host,
+        musicalGuest: episode.musicalGuest
+      });
+    });
+  });
+
+  allEpisodes.sort(function (first, second) {
+    return first.season - second.season || first.number - second.number;
+  });
 
   function formatEpisodeDate(date) {
     const parts = date.split("-").map(Number);
@@ -83,7 +108,8 @@
       const link = document.createElement("a");
       link.className = "episode-link";
       link.href = "#season-" + seasonNumber + "-episode-" + episode.number;
-      link.textContent = formatEpisodeDate(episode.date) + " — " + episode.host;
+      link.textContent = "Episode " + episode.number + " — " + formatEpisodeDate(episode.date) +
+        " — " + episode.host + " · " + (episode.musicalGuest || "Musical guest not listed");
       item.append(link);
       return item;
     });
@@ -112,10 +138,81 @@
     episodeSeasonLabel.textContent = "Season " + seasonNumber + " · Episode " + episode.number;
     episodeDate.textContent = formattedDate;
     episodeHost.textContent = episode.host;
+    episodeMusicGuest.textContent = episode.musicalGuest || "Not listed";
     episodeBackLink.href = "#season-" + seasonNumber;
     episodeBackLink.textContent = "← Back to Season " + seasonNumber;
     document.title = formattedDate + " — " + episode.host + " | " + STARTUP.name;
   }
+
+  function makeEpisodeRow(episode) {
+    const row = document.createElement("tr");
+    const seasonCell = document.createElement("td");
+    const seasonLink = document.createElement("a");
+    seasonLink.href = "#season-" + episode.season;
+    seasonLink.textContent = String(episode.season);
+    seasonCell.append(seasonLink);
+
+    const numberCell = document.createElement("td");
+    const episodeLink = document.createElement("a");
+    episodeLink.href = "#season-" + episode.season + "-episode-" + episode.number;
+    episodeLink.textContent = String(episode.number);
+    numberCell.append(episodeLink);
+
+    const hostCell = document.createElement("td");
+    hostCell.textContent = episode.host;
+
+    const musicGuestCell = document.createElement("td");
+    musicGuestCell.textContent = episode.musicalGuest || "Not listed";
+
+    const dateCell = document.createElement("td");
+    const date = document.createElement("time");
+    date.setAttribute("datetime", episode.date);
+    date.textContent = formatEpisodeDate(episode.date);
+    dateCell.append(date);
+
+    row.append(seasonCell, numberCell, hostCell, musicGuestCell, dateCell);
+    return row;
+  }
+
+  function renderEpisodeDatabase() {
+    const query = episodeSearchBox.value.trim().toLowerCase();
+    const selectedSeason = episodeSeasonFilter.value;
+    const dateFrom = episodeDateFrom.value;
+    const dateTo = episodeDateTo.value;
+    const matches = allEpisodes.filter(function (episode) {
+      const searchableText = [
+        "season " + episode.season,
+        "episode " + episode.number,
+        "s" + episode.season,
+        String(episode.number),
+        episode.host,
+        episode.musicalGuest,
+        episode.date,
+        formatEpisodeDate(episode.date)
+      ].join(" ").toLowerCase();
+
+      return (!query || searchableText.indexOf(query) !== -1) &&
+        (!selectedSeason || String(episode.season) === selectedSeason) &&
+        (!dateFrom || episode.date >= dateFrom) &&
+        (!dateTo || episode.date <= dateTo);
+    });
+
+    episodeDatabaseBody.replaceChildren.apply(episodeDatabaseBody, matches.map(makeEpisodeRow));
+    episodeResultCount.textContent = "Showing " + matches.length + " of " + allEpisodes.length + " episodes.";
+    episodeEmptyMessage.hidden = matches.length > 0;
+  }
+
+  Object.keys(SEASON_EPISODES).forEach(function (season) {
+    const option = document.createElement("option");
+    option.value = season;
+    option.textContent = "Season " + season;
+    episodeSeasonFilter.append(option);
+  });
+
+  episodeSearchBox.addEventListener("input", renderEpisodeDatabase);
+  episodeSeasonFilter.addEventListener("change", renderEpisodeDatabase);
+  episodeDateFrom.addEventListener("change", renderEpisodeDatabase);
+  episodeDateTo.addEventListener("change", renderEpisodeDatabase);
 
   const popularSketchGrid = document.getElementById("popular-sketch-grid");
   const fanRankingList = document.getElementById("fan-ranking-list");
@@ -187,6 +284,9 @@
       renderSeasonPage(seasonNumber);
     } else if (current === "episode-page") {
       renderEpisodePage(episodeSeasonNumber, episode);
+    } else if (current === "episodes") {
+      renderEpisodeDatabase();
+      document.title = "Episode Guide | " + STARTUP.name;
     } else {
       document.title = STARTUP.name;
     }

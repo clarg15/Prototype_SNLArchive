@@ -1,6 +1,6 @@
 // ============================================================
 // data.js — Sample and fictional content for your prototype.
-// Historical episode dates and hosts live in episodes.js.
+// Historical episode dates, hosts, and musical guests live in episodes.js.
 //
 // There is no database. Everything below is made up, and that is
 // on purpose: never put real people's names, emails, phone numbers
