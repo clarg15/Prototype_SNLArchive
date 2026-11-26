@@ -122,7 +122,7 @@ That link is your live site. Every commit updates it automatically within a few 
 
 ## The rules
 
-- No real personal information about anyone — all data is fake.
+- Keep personal information private; user and fan content in this prototype must be fictional. Historical episode dates and hosts are public listings.
 - No passwords, API keys or secrets in any file.
 - No real payments, logins or forms that send data anywhere.
 - No real company logos, brand names or copyrighted characters.
@@ -135,7 +135,8 @@ That link is your live site. Every commit updates it automatically within a few 
 |---|---|
 | `index.html` | The structure and text of your site |
 | `styles.css` | How it looks: colours, fonts, spacing |
-| `data.js` | All your fake data (listings, prices, users…) |
+| `data.js` | Fake sample content for the homepage and Explore page |
+| `episodes.js` | Aired episode dates and hosts for seasons 1–52, sourced from TVmaze |
 | `app.js` | What the site *does* when people click things |
 | `project-notes/PROJECT_LOG.md` | Your team's record of prompts, problems and decisions |
 | `project-notes/BUSINESS_CASE.md` | The business reasoning behind your prototype |

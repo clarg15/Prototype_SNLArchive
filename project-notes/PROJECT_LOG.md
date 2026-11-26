@@ -29,7 +29,7 @@ Copy this block for each session.
 | Nov 23 | Couldn't figure out how to create a good first draft | Put the template prompt into copilot | Being more specific about what I'm looking for. |
 | Nov 24 | Couldn't launch a live website | Asked copilot for the link, but its said github hasnt configured a live website link yet | reworked ideas through the index.html page  |
 |  Nov 25    |   Site was giving a Error 404 message             | Went through Build and deployment source and changed some settings to allow main branch sourcing |
-| Nov 25 | I asked copilot to make visual changes to the site, it said it did but no changes were made| I tried asking t again, but It still didnt make any changes | 
+| Nov 25 | I asked copilot to make visual changes to the site, it said it did but no changes were made| I tried asking t again, but It still didnt make any changes | Commited and waited 10 minutes.|
 
 ## What a real version would need
 

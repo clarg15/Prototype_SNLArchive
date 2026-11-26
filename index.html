@@ -15,6 +15,7 @@
     <nav class="primary-nav" aria-label="Main navigation">
       <a href="#home">Home</a>
       <a href="#explore">Explore</a>
+      <a href="#seasons">Seasons</a>
       <a href="#about">About</a>
     </nav>
   </header>
@@ -110,6 +111,46 @@
       <p class="empty" id="empty-message" hidden>Nothing matches your search.</p>
     </section>
 
+    <section id="seasons" data-view hidden aria-labelledby="seasons-heading">
+      <div class="page-intro">
+        <p class="eyebrow">From the archive</p>
+        <h1 id="seasons-heading">Browse all seasons</h1>
+        <p class="muted">Choose a season to explore its aired episodes. Each episode page includes its original air date and host.</p>
+      </div>
+      <div class="season-grid" id="season-grid" aria-label="Seasons 1 through 52"></div>
+      <p class="source-note">Episode dates and host listings are sourced from <a href="https://www.tvmaze.com/shows/361/saturday-night-live/episodes" target="_blank" rel="noopener noreferrer">TVmaze</a>. Only episodes aired through November 26, 2026 are included.</p>
+    </section>
+
+    <section id="season-page" data-view hidden aria-labelledby="season-title">
+      <a class="back-link" href="#seasons">← All seasons</a>
+      <div class="page-intro">
+        <p class="eyebrow" id="season-episode-count"></p>
+        <h1 id="season-title">Season 1</h1>
+        <p class="muted">Select an episode to see its air date and host.</p>
+      </div>
+      <ol class="episode-list" id="season-episode-list"></ol>
+      <p class="source-note">Episode dates and host listings are sourced from <a href="https://www.tvmaze.com/shows/361/saturday-night-live/episodes" target="_blank" rel="noopener noreferrer">TVmaze</a>.</p>
+    </section>
+
+    <section id="episode-page" data-view hidden aria-labelledby="episode-title">
+      <a class="back-link" id="episode-back-link" href="#season-1">← Back to season</a>
+      <article class="episode-detail">
+        <p class="eyebrow" id="episode-season-label">Season 1 · Episode 1</p>
+        <h1 id="episode-title">October 11, 1975 — George Carlin</h1>
+        <dl class="episode-facts">
+          <div>
+            <dt>Original air date</dt>
+            <dd id="episode-date">October 11, 1975</dd>
+          </div>
+          <div>
+            <dt>Host</dt>
+            <dd id="episode-host">George Carlin</dd>
+          </div>
+        </dl>
+        <p class="source-note">Episode dates and host listings are sourced from <a href="https://www.tvmaze.com/shows/361/saturday-night-live/episodes" target="_blank" rel="noopener noreferrer">TVmaze</a>.</p>
+      </article>
+    </section>
+
     <section id="about" data-view hidden aria-labelledby="about-heading">
       <div class="page-intro">
         <p class="eyebrow">The idea behind the archive</p>
@@ -125,7 +166,7 @@
         </div>
         <aside class="project-note">
           <span class="project-note-label">A student prototype</span>
-          <p>This site is a class project. The archive uses fictional sample data and does not represent a real company.</p>
+          <p>This site is a class project. Episode dates and hosts are historical listings; sample fan content is fictional. It is not affiliated with SNL.</p>
         </aside>
       </div>
     </section>
@@ -134,15 +175,18 @@
 
   <footer class="site-footer">
     <a class="footer-brand" href="#home">SNL Archive</a>
-    <p>Student prototype for BSAD 281 at St. Francis Xavier University. Not a real company — all sample content is fictional.</p>
+    <p>Student prototype for BSAD 281 at St. Francis Xavier University. Episode dates and hosts are historical listings; sample fan content is fictional.</p>
     <nav class="footer-nav" aria-label="Footer navigation">
       <a href="#home">Home</a>
       <a href="#explore">Explore</a>
+      <a href="#seasons">Seasons</a>
       <a href="#about">About</a>
     </nav>
   </footer>
 
   <script src="data.js"></script>
+  <script src="episodes.js"></script>
+  <script src="episodes.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
