@@ -1,7 +1,7 @@
 // ============================================================
 // app.js — what your site DOES.
 // Plain JavaScript, no libraries, no installs.
-// It uses sample content from data.js and episode listings from episodes.js.
+// It uses sample content from data.js, episode listings from episodes.js, and people records from people.js.
 // ============================================================
 
 (function () {
@@ -216,6 +216,12 @@
 
   const popularSketchGrid = document.getElementById("popular-sketch-grid");
   const fanRankingList = document.getElementById("fan-ranking-list");
+  const peopleDatabaseBody = document.getElementById("people-database-body");
+  const peopleSearchBox = document.getElementById("people-search-box");
+  const peopleRoleFilter = document.getElementById("people-role-filter");
+  const peopleSeasonFilter = document.getElementById("people-season-filter");
+  const peopleResultCount = document.getElementById("people-result-count");
+  const peopleEmptyMessage = document.getElementById("people-empty-message");
 
   function makeSketchCard(sketch) {
     const card = document.createElement("article");
@@ -249,8 +255,108 @@
     return item;
   }
 
+  function formatPeopleSeasonList(seasons) {
+    if (seasons.length === 0) {
+      return "—";
+    }
+
+    const ranges = [];
+    let first = seasons[0];
+    let last = first;
+    for (let index = 1; index <= seasons.length; index += 1) {
+      const current = seasons[index];
+      if (current === last + 1) {
+        last = current;
+        continue;
+      }
+
+      ranges.push(first === last ? "S" + first : "S" + first + "–S" + last);
+      first = current;
+      last = current;
+    }
+
+    const startYear = 1974 + seasons[0];
+    const endYear = 1975 + seasons[seasons.length - 1];
+    return ranges.join(", ") + " · " + startYear + "–" + endYear;
+  }
+
+  function makePeopleRow(person) {
+    const row = document.createElement("tr");
+    const nameCell = document.createElement("th");
+    nameCell.scope = "row";
+    nameCell.textContent = person.name;
+
+    const roles = [];
+    if (person.castSeasons.length > 0) {
+      roles.push("Cast member");
+    }
+    if (person.writerSeasons.length > 0) {
+      roles.push("Writer");
+    }
+    const roleCell = document.createElement("td");
+    roleCell.textContent = roles.join(" · ");
+
+    const castCell = document.createElement("td");
+    castCell.textContent = formatPeopleSeasonList(person.castSeasons);
+
+    const writerCell = document.createElement("td");
+    writerCell.textContent = formatPeopleSeasonList(person.writerSeasons);
+
+    row.append(nameCell, roleCell, castCell, writerCell);
+    return row;
+  }
+
+  function renderPeopleDatabase() {
+    const query = peopleSearchBox.value.trim().toLowerCase();
+    const selectedRole = peopleRoleFilter.value;
+    const selectedSeason = Number(peopleSeasonFilter.value);
+    const seasonQueryMatch = query.match(/^(?:s|season\s+)(\d+)$/);
+    const querySeason = seasonQueryMatch ? Number(seasonQueryMatch[1]) : null;
+    const matches = SNL_PEOPLE.filter(function (person) {
+      const hasCastRole = person.castSeasons.length > 0;
+      const hasWriterRole = person.writerSeasons.length > 0;
+      const matchesRole = !selectedRole ||
+        (selectedRole === "cast" && hasCastRole) ||
+        (selectedRole === "writer" && hasWriterRole);
+      const matchesSeason = !selectedSeason ||
+        ((selectedRole !== "writer" && person.castSeasons.indexOf(selectedSeason) !== -1) ||
+          (selectedRole !== "cast" && person.writerSeasons.indexOf(selectedSeason) !== -1));
+      const searchableText = [
+        person.name,
+        hasCastRole ? "cast member cast" : "",
+        hasWriterRole ? "writer" : "",
+        person.castYears || "",
+        person.castSeasons.map(function (season) {
+          return "season " + season + " s" + season + " " + (1974 + season) + " " + (1975 + season);
+        }).join(" "),
+        person.writerSeasons.map(function (season) {
+          return "season " + season + " s" + season + " " + (1974 + season) + " " + (1975 + season);
+        }).join(" ")
+      ].join(" ").toLowerCase();
+      const matchesQuery = !query || (querySeason
+        ? ((selectedRole !== "writer" && person.castSeasons.indexOf(querySeason) !== -1) ||
+          (selectedRole !== "cast" && person.writerSeasons.indexOf(querySeason) !== -1))
+        : searchableText.indexOf(query) !== -1);
+
+      return matchesRole && matchesSeason && matchesQuery;
+    });
+
+    peopleDatabaseBody.replaceChildren.apply(peopleDatabaseBody, matches.map(makePeopleRow));
+    peopleResultCount.textContent = "Showing " + matches.length + " of " + SNL_PEOPLE.length + " people.";
+    peopleEmptyMessage.hidden = matches.length > 0;
+  }
+
   popularSketchGrid.replaceChildren.apply(popularSketchGrid, POPULAR_SKETCHES.map(makeSketchCard));
   fanRankingList.replaceChildren.apply(fanRankingList, POPULAR_SKETCHES.map(makeRankingItem));
+  for (let seasonNumber = 1; seasonNumber <= 52; seasonNumber += 1) {
+    const option = document.createElement("option");
+    option.value = String(seasonNumber);
+    option.textContent = "Season " + seasonNumber;
+    peopleSeasonFilter.append(option);
+  }
+  peopleSearchBox.addEventListener("input", renderPeopleDatabase);
+  peopleRoleFilter.addEventListener("change", renderPeopleDatabase);
+  peopleSeasonFilter.addEventListener("change", renderPeopleDatabase);
 
   // ----------------------------------------------------------
   // 3. Views: show one section at a time, based on the #link in the address bar.
@@ -287,6 +393,9 @@
     } else if (current === "episodes") {
       renderEpisodeDatabase();
       document.title = "Episode Guide | " + STARTUP.name;
+    } else if (current === "cast") {
+      renderPeopleDatabase();
+      document.title = "Cast & Writers | " + STARTUP.name;
     } else {
       document.title = STARTUP.name;
     }

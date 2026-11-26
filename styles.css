@@ -564,6 +564,22 @@ h1, h2, h3 {
   margin: 22px 0 12px;
 }
 
+.people-filter-grid {
+  display: grid;
+  grid-template-columns: minmax(240px, 2fr) repeat(2, minmax(170px, 1fr));
+  gap: 12px;
+  margin: 22px 0 12px;
+}
+
+.people-filter-grid label { display: block; }
+
+.people-filter-grid label span {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 0.9rem;
+  font-weight: 750;
+}
+
 .episode-filter-grid label { display: block; }
 
 .episode-filter-grid label span {
@@ -574,7 +590,9 @@ h1, h2, h3 {
 }
 
 .episode-filter-grid input,
-.episode-filter-grid select {
+.episode-filter-grid select,
+.people-filter-grid input,
+.people-filter-grid select {
   width: 100%;
   min-height: 46px;
   padding: 9px 12px;
@@ -600,6 +618,9 @@ h1, h2, h3 {
   border-collapse: collapse;
   text-align: left;
 }
+
+.people-table { min-width: 860px; }
+.people-table th[scope="row"] { color: var(--ink); background: transparent; font-size: inherit; letter-spacing: normal; text-transform: none; }
 
 .episode-table th,
 .episode-table td {
@@ -737,6 +758,7 @@ h1, h2, h3 {
   .hero-art-inner { min-height: 250px; padding: 24px; }
   .episode-card { grid-template-columns: minmax(180px, 0.7fr) minmax(0, 1.3fr); gap: 25px; }
   .episode-filter-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .people-filter-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .popular-layout { grid-template-columns: 1fr; }
   .sketch-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
   .site-footer { grid-template-columns: 1fr auto; }
@@ -762,6 +784,7 @@ h1, h2, h3 {
   .episode-card { grid-template-columns: 1fr; }
   .episode-art { min-height: 205px; }
   .episode-filter-grid { grid-template-columns: 1fr; }
+  .people-filter-grid { grid-template-columns: 1fr; }
   .sketch-grid { grid-template-columns: 1fr; }
   .about-panel { grid-template-columns: 1fr; gap: 25px; padding: 25px; }
   .site-footer { grid-template-columns: 1fr; gap: 12px; padding: 20px 16px; }
