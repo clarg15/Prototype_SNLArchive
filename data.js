@@ -41,6 +41,39 @@ const POPULAR_SKETCHES = [
   }
 ];
 
+const RANKING_CATEGORIES = [
+  {
+    title: "Best sketches of all time",
+    link: "#popular-sketches",
+    linkText: "View popular sketches",
+    entries: ["More Cowbell", "Celebrity Jeopardy", "Debbie Downer"]
+  },
+  {
+    title: "Cast members",
+    link: "#cast",
+    linkText: "Explore cast & writers",
+    entries: ["Kate McKinnon", "Will Ferrell", "Bill Murray"]
+  },
+  {
+    title: "Hosts",
+    link: "#episodes",
+    linkText: "Explore episodes",
+    entries: ["Steve Martin", "Alec Baldwin", "John Goodman"]
+  },
+  {
+    title: "Musical Guests",
+    link: "#episodes",
+    linkText: "Search musical guests",
+    entries: ["Prince", "David Bowie", "Beyonce"]
+  },
+  {
+    title: "Weekend Update anchors",
+    link: "#cast",
+    linkText: "Explore the archive",
+    entries: ["Norm Macdonald", "Colin Jost", "Seth Meyers"]
+  }
+];
+
 const LISTINGS = [
   { id: 1, name: "Sketch discussions", category: "Community", description: "Share reactions and join conversations about memorable SNL sketches." },
   { id: 2, name: "Sketch ratings", category: "Reviews", description: "Rate sketches and see what other fans think." },
