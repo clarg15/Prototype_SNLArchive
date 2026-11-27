@@ -13,14 +13,14 @@
 
 const STARTUP = {
   name: "SNL Archive",
-  tagline: "Live from New York. Forever.",
+  tagline: "Rewind. Laugh. Rank",
   pitch: "Your seat in the fandom—revisit classic sketches, explore every episode, and keep the late-night conversation going."
 };
 
 const FEATURED_EPISODE = {
   label: "Season 52, Episode 7",
   title: "Amanda Seyfried",
-  description: "December 5, 2026 · Live from Studio 8H. Our fictional Season 52 spotlight takes you behind the week's host, music, and late-night energy."
+  description: "December 5, 2026 · Live from Studio 8H."
 };
 
 const POPULAR_SKETCHES = [
