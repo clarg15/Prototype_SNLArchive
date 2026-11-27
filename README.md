@@ -139,6 +139,7 @@ That link is your live site. Every commit updates it automatically within a few 
 | `styles.css` | How it looks: colours, fonts, spacing |
 | `data.js` | Homepage content and sample fan-ranking options and vote totals |
 | `episodes.js` | Aired episode numbers, dates, hosts, and musical guests for seasons 1–52; compiled from Wikipedia episode tables, with TVmaze entries for three SNL at Home broadcasts |
+| `sketches.js` | A curated searchable set of 65 sketches with episode details, cast-role notes, and sources |
 | `people.js` | A static snapshot of 174 listed cast members and 313 unique season-by-season writers, merged where people held both roles |
 | `app.js` | What the site *does* when people click things |
 | `project-notes/PROJECT_LOG.md` | Your team's record of prompts, problems and decisions |
