@@ -233,6 +233,117 @@
   const rankingAddForm = document.getElementById("ranking-add-form");
   const rankingOptionInput = document.getElementById("ranking-option-input");
   const rankingFeedback = document.getElementById("ranking-feedback");
+  const sketchSearchBox = document.getElementById("sketch-search-box");
+  const sketchSeasonFilter = document.getElementById("sketch-season-filter");
+  const sketchResultCount = document.getElementById("sketch-result-count");
+  const sketchDatabaseGrid = document.getElementById("sketch-database-grid");
+  const sketchEmptyMessage = document.getElementById("sketch-empty-message");
+  const sketchDialog = document.getElementById("sketch-dialog");
+  const sketchDialogTitle = document.getElementById("sketch-dialog-title");
+  const sketchDialogEpisode = document.getElementById("sketch-dialog-episode");
+  const sketchDialogCast = document.getElementById("sketch-dialog-cast");
+  const sketchDialogEmpty = document.getElementById("sketch-dialog-empty");
+  const sketchDialogSource = document.getElementById("sketch-dialog-source");
+  const sketchDialogClose = document.getElementById("sketch-dialog-close");
+
+  function makeSketchDatabaseCard(sketch) {
+    const card = document.createElement("article");
+    card.className = "card sketch-entry-card";
+
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "sketch-entry-button";
+    button.setAttribute("aria-label", "View details for " + sketch.title);
+    button.addEventListener("click", function () {
+      showSketchDetails(sketch);
+    });
+
+    const title = document.createElement("span");
+    title.className = "sketch-entry-title";
+    title.textContent = sketch.title;
+
+    const episode = document.createElement("span");
+    episode.className = "sketch-entry-meta";
+    episode.textContent = "Season " + sketch.season + " · Episode " + sketch.episode;
+
+    const host = document.createElement("span");
+    host.className = "sketch-entry-host";
+    host.textContent = sketch.host + " · " + formatEpisodeDate(sketch.airDate);
+
+    button.append(title, episode, host);
+    card.append(button);
+    return card;
+  }
+
+  function renderSketchDatabase() {
+    const query = sketchSearchBox.value.trim().toLowerCase();
+    const selectedSeason = sketchSeasonFilter.value;
+    const matches = SNL_SKETCHES.filter(function (sketch) {
+      const searchableText = [
+        sketch.title,
+        "season " + sketch.season,
+        "episode " + sketch.episode,
+        sketch.host,
+        sketch.castRoles.map(function (performer) {
+          return performer.name + " " + performer.role;
+        }).join(" "),
+        sketch.airDate
+      ].join(" ").toLowerCase();
+
+      return (!query || searchableText.indexOf(query) !== -1) &&
+        (!selectedSeason || String(sketch.season) === selectedSeason);
+    });
+
+    sketchDatabaseGrid.replaceChildren.apply(sketchDatabaseGrid, matches.map(makeSketchDatabaseCard));
+    sketchResultCount.textContent = "Showing " + matches.length + " of " + SNL_SKETCHES.length + " sketches.";
+    sketchEmptyMessage.hidden = matches.length > 0;
+  }
+
+  function showSketchDetails(sketch) {
+    sketchDialogTitle.textContent = sketch.title;
+    sketchDialogEpisode.textContent = "Season " + sketch.season + ", Episode " + sketch.episode +
+      " · " + sketch.host + " · " + formatEpisodeDate(sketch.airDate);
+    const castRows = sketch.castRoles.map(function (performer) {
+      const item = document.createElement("li");
+      const name = document.createElement("strong");
+      name.textContent = performer.name;
+      const role = document.createElement("span");
+      role.textContent = performer.role;
+      item.append(name, role);
+      return item;
+    });
+    sketchDialogCast.replaceChildren.apply(sketchDialogCast, castRows);
+    sketchDialogEmpty.hidden = castRows.length > 0;
+    sketchDialogSource.replaceChildren();
+
+    if (sketch.source && sketch.source.url) {
+      const sourceLink = document.createElement("a");
+      sourceLink.href = sketch.source.url;
+      sourceLink.target = "_blank";
+      sourceLink.rel = "noopener noreferrer";
+      sourceLink.textContent = "Source: " + sketch.source.name;
+      sketchDialogSource.append(sourceLink);
+    }
+
+    sketchDialog.showModal();
+  }
+
+  const sketchSeasons = Array.from(new Set(SNL_SKETCHES.map(function (sketch) {
+    return sketch.season;
+  }))).sort(function (first, second) {
+    return first - second;
+  });
+  sketchSeasons.forEach(function (season) {
+    const option = document.createElement("option");
+    option.value = String(season);
+    option.textContent = "Season " + season;
+    sketchSeasonFilter.append(option);
+  });
+  sketchSearchBox.addEventListener("input", renderSketchDatabase);
+  sketchSeasonFilter.addEventListener("change", renderSketchDatabase);
+  sketchDialogClose.addEventListener("click", function () {
+    sketchDialog.close();
+  });
 
   function makeSketchCard(sketch) {
     const card = document.createElement("article");
@@ -602,6 +713,9 @@
     } else if (current === "episodes") {
       renderEpisodeDatabase();
       document.title = "Episode Guide | " + STARTUP.name;
+    } else if (current === "sketches") {
+      renderSketchDatabase();
+      document.title = "Sketch Database | " + STARTUP.name;
     } else if (current === "cast") {
       renderPeopleDatabase();
       document.title = "Cast & Writers | " + STARTUP.name;
