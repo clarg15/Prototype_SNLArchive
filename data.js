@@ -13,8 +13,8 @@
 
 const STARTUP = {
   name: "SNL Archive",
-  tagline: "Rewind. Laugh. Rank",
-  pitch: "Your seat in the fandom—revisit classic sketches, explore every episode, and keep the late-night conversation going."
+  tagline: "The ultimate library of laughs.",
+  pitch: "Your seat to keep the late-night conversation going."
 };
 
 const FEATURED_EPISODE = {
