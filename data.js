@@ -1,14 +1,11 @@
 // ============================================================
-// data.js — Sample and fictional content for your prototype.
+// data.js — Homepage and sample fan-ranking content for the prototype.
 // Historical episode dates, hosts, and musical guests live in episodes.js.
 //
-// There is no database. Everything below is made up, and that is
-// on purpose: never put real people's names, emails, phone numbers
-// or addresses in this file.
+// There is no database. Ranking votes are illustrative demo data. Never
+// put personal contact information or private user content in this file.
 //
-// To change what appears on the Explore page, edit LISTINGS.
-// Each item is one card. Keep the same fields (id, name, category,
-// description) or ask Copilot to add new ones everywhere they're needed.
+// RANKING_CATEGORIES contains sample rankings. Vote totals are demo data.
 // ============================================================
 
 const STARTUP = {
@@ -43,42 +40,57 @@ const POPULAR_SKETCHES = [
 
 const RANKING_CATEGORIES = [
   {
-    title: "Best sketches of all time",
-    link: "#popular-sketches",
-    linkText: "View popular sketches",
-    entries: ["More Cowbell", "Celebrity Jeopardy", "Debbie Downer"]
-  },
-  {
+    id: "cast-members",
     title: "Cast members",
-    link: "#cast",
-    linkText: "Explore cast & writers",
-    entries: ["Kate McKinnon", "Will Ferrell", "Bill Murray"]
+    entries: [
+      { name: "Kate McKinnon", votes: 42 },
+      { name: "Will Ferrell", votes: 37 },
+      { name: "Bill Murray", votes: 31 }
+    ]
   },
   {
+    id: "hosts",
     title: "Hosts",
-    link: "#episodes",
-    linkText: "Explore episodes",
-    entries: ["Steve Martin", "Alec Baldwin", "John Goodman"]
+    entries: [
+      { name: "Steve Martin", votes: 40 },
+      { name: "Alec Baldwin", votes: 33 },
+      { name: "John Goodman", votes: 27 }
+    ]
   },
   {
-    title: "Musical Guests",
-    link: "#episodes",
-    linkText: "Search musical guests",
-    entries: ["Prince", "David Bowie", "Beyonce"]
+    id: "musical-guests",
+    title: "Musical guests",
+    entries: [
+      { name: "Prince", votes: 46 },
+      { name: "David Bowie", votes: 39 },
+      { name: "Beyonce", votes: 32 }
+    ]
   },
   {
-    title: "Weekend Update anchors",
-    link: "#cast",
-    linkText: "Explore the archive",
-    entries: ["Norm Macdonald", "Colin Jost", "Seth Meyers"]
+    id: "sketches",
+    title: "Sketches",
+    entries: [
+      { name: "More Cowbell", votes: 54 },
+      { name: "Celebrity Jeopardy!", votes: 49 },
+      { name: "Debbie Downer", votes: 34 }
+    ]
+  },
+  {
+    id: "episodes",
+    title: "Episodes",
+    entries: [
+      { name: "George Carlin — October 11, 1975", votes: 36 },
+      { name: "Betty White — May 8, 2010", votes: 31 },
+      { name: "Steve Martin — October 23, 1976", votes: 28 }
+    ]
+  },
+  {
+    id: "seasons",
+    title: "Seasons",
+    entries: [
+      { name: "Season 10 (1984–85)", votes: 37 },
+      { name: "Season 1 (1975–76)", votes: 33 },
+      { name: "Season 39 (2013–14)", votes: 28 }
+    ]
   }
-];
-
-const LISTINGS = [
-  { id: 1, name: "Sketch discussions", category: "Community", description: "Share reactions and join conversations about memorable SNL sketches." },
-  { id: 2, name: "Sketch ratings", category: "Reviews", description: "Rate sketches and see what other fans think." },
-  { id: 3, name: "Fan rankings", category: "Rankings", description: "Build and explore rankings of favorite sketches, episodes, and eras." },
-  { id: 4, name: "Cast and hosts", category: "Show facts", description: "Find information about the performers and guest hosts behind the show." },
-  { id: 5, name: "Episode archive", category: "Show facts", description: "Explore episodes and look up details from across SNL's history." },
-  { id: 6, name: "Musical guests", category: "Show facts", description: "Discover the artists who have performed on Saturday Night Live." }
 ];
