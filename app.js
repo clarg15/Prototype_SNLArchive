@@ -35,6 +35,10 @@
   if (!rankingState || typeof rankingState !== "object" || Array.isArray(rankingState)) {
     rankingState = {};
   }
+  let favoriteState = storage.get("myLists", {});
+  if (!favoriteState || typeof favoriteState !== "object" || Array.isArray(favoriteState)) {
+    favoriteState = {};
+  }
 
   // ----------------------------------------------------------
   // 2. Put the startup's name and pitch on the page.
@@ -233,6 +237,9 @@
   const rankingAddForm = document.getElementById("ranking-add-form");
   const rankingOptionInput = document.getElementById("ranking-option-input");
   const rankingFeedback = document.getElementById("ranking-feedback");
+  const myListsGroups = document.getElementById("my-lists-groups");
+  const myListsEmpty = document.getElementById("my-lists-empty");
+  const myListsFeedback = document.getElementById("my-lists-feedback");
   const sketchSearchBox = document.getElementById("sketch-search-box");
   const sketchSeasonFilter = document.getElementById("sketch-season-filter");
   const sketchResultCount = document.getElementById("sketch-result-count");
@@ -457,6 +464,21 @@
     });
   }
 
+  function getFavoriteIds(category) {
+    const storedIds = favoriteState[category.id];
+    if (!Array.isArray(storedIds)) {
+      return [];
+    }
+
+    return storedIds.filter(function (entryId, index) {
+      return typeof entryId === "string" && storedIds.indexOf(entryId) === index;
+    });
+  }
+
+  function isRankingFavorite(category, entryId) {
+    return getFavoriteIds(category).indexOf(entryId) !== -1;
+  }
+
   function makeRankingCard(category) {
     const card = document.createElement("article");
     card.className = "card ranking-card";
@@ -554,12 +576,133 @@
           toggleRankingVote(category, entry.id);
         });
 
-        controls.append(votes, button);
+        const favoriteButton = document.createElement("button");
+        const isFavorite = isRankingFavorite(category, entry.id);
+        favoriteButton.type = "button";
+        favoriteButton.className = isFavorite
+          ? "button secondary ranking-favorite-button is-active"
+          : "button secondary ranking-favorite-button";
+        favoriteButton.textContent = isFavorite ? "Saved" : "Save";
+        favoriteButton.setAttribute("aria-pressed", isFavorite ? "true" : "false");
+        favoriteButton.setAttribute("aria-label", (isFavorite ? "Remove " : "Save ") + entry.name + " " +
+          (isFavorite ? "from" : "to") + " My Lists");
+        favoriteButton.addEventListener("click", function () {
+          toggleRankingFavorite(category, entry.id, false);
+        });
+
+        controls.append(votes, button, favoriteButton);
         item.append(position, name, controls);
         return item;
       });
 
     rankingOptionList.replaceChildren.apply(rankingOptionList, rankingItems);
+  }
+
+  function getFavoriteEntries(category) {
+    const favoriteIds = getFavoriteIds(category);
+    return getRankingEntries(category).filter(function (entry) {
+      return favoriteIds.indexOf(entry.id) !== -1;
+    }).sort(function (first, second) {
+      return second.votes - first.votes || first.name.localeCompare(second.name);
+    });
+  }
+
+  function makeMyListCategory(category, entries) {
+    const card = document.createElement("article");
+    card.className = "card my-list-category";
+
+    const heading = document.createElement("div");
+    heading.className = "my-list-category-heading";
+
+    const title = document.createElement("h2");
+    title.textContent = category.title;
+
+    const categoryLink = document.createElement("a");
+    categoryLink.className = "card-link";
+    categoryLink.href = "#rankings-" + category.id;
+    categoryLink.textContent = "Browse ranking →";
+    heading.append(title, categoryLink);
+
+    const list = document.createElement("ul");
+    list.className = "my-list-items";
+    entries.forEach(function (entry) {
+      const item = document.createElement("li");
+      item.className = "my-list-item";
+
+      const name = document.createElement("span");
+      name.className = "my-list-item-name";
+      name.textContent = entry.name;
+
+      const removeButton = document.createElement("button");
+      removeButton.type = "button";
+      removeButton.className = "button secondary my-list-remove-button";
+      removeButton.textContent = "Remove";
+      removeButton.setAttribute("aria-label", "Remove " + entry.name + " from My Lists");
+      removeButton.addEventListener("click", function () {
+        toggleRankingFavorite(category, entry.id, true);
+      });
+
+      item.append(name, removeButton);
+      list.append(item);
+    });
+
+    card.append(heading, list);
+    return card;
+  }
+
+  function renderMyLists(feedbackMessage) {
+    const groups = RANKING_CATEGORIES.map(function (category) {
+      const entries = getFavoriteEntries(category);
+      return entries.length ? makeMyListCategory(category, entries) : null;
+    }).filter(Boolean);
+
+    myListsGroups.replaceChildren.apply(myListsGroups, groups);
+    myListsEmpty.hidden = groups.length > 0;
+    myListsFeedback.textContent = feedbackMessage || "";
+  }
+
+  function toggleRankingFavorite(category, entryId, fromMyLists) {
+    const entryExists = getRankingEntries(category).some(function (entry) {
+      return entry.id === entryId;
+    });
+    if (!entryExists) {
+      const errorMessage = "That option could not be found. Please refresh and try again.";
+      if (fromMyLists) {
+        renderMyLists(errorMessage);
+      } else {
+        renderRankingCategory(category, errorMessage);
+      }
+      return;
+    }
+
+    const wasSaved = isRankingFavorite(category, entryId);
+    const updatedIds = getFavoriteIds(category).filter(function (id) {
+      return id !== entryId;
+    });
+    if (!wasSaved) {
+      updatedIds.push(entryId);
+    }
+
+    const updatedState = Object.assign({}, favoriteState);
+    updatedState[category.id] = updatedIds;
+    if (!storage.set("myLists", updatedState)) {
+      const errorMessage = "This browser could not save your favorite. It will be lost when you leave this page.";
+      if (fromMyLists) {
+        renderMyLists(errorMessage);
+      } else {
+        renderRankingCategory(category, errorMessage);
+      }
+      return;
+    }
+
+    favoriteState = updatedState;
+    const successMessage = wasSaved ? "Favorite removed from My Lists." : "Favorite saved to My Lists.";
+    if (fromMyLists) {
+      renderMyLists(successMessage);
+    } else {
+      renderRankingCategory(category, successMessage);
+      renderMyLists();
+    }
   }
 
   function saveRankingEntries(category, entries, successMessage) {
@@ -710,6 +853,9 @@
       const category = rankingCategory || RANKING_CATEGORIES[0];
       renderRankingCategory(category);
       document.title = category.title + " Fan Rankings | " + STARTUP.name;
+    } else if (current === "my-lists") {
+      renderMyLists();
+      document.title = "My Lists | " + STARTUP.name;
     } else if (current === "episodes") {
       renderEpisodeDatabase();
       document.title = "Episode Guide | " + STARTUP.name;
