@@ -30,6 +30,7 @@ Copy this block for each session.
 | Nov 24 | Couldn't launch a live website | Asked copilot for the link, but its said github hasnt configured a live website link yet | reworked ideas through the index.html page  |
 |  Nov 25    |   Site was giving a Error 404 message             | Went through Build and deployment source and changed some settings to allow main branch sourcing |
 | Nov 25 | I asked copilot to make visual changes to the site, it said it did but no changes were made| I tried asking t again, but It still didnt make any changes | Commited and waited 10 minutes.|
+| Nov 26 | My progress was wiped. All edits made yesterday have disapeared. Including what I wrote in my project log and business case. | I tired to commit actions to rid the notifications. | I had to revert to an old commit but my progress from yesterday has been deleted. |
 
 ## What a real version would need
 

@@ -1,15 +1,15 @@
 :root {
-  --ink: #202326;
-  --muted: #6b706f;
-  --paper: #f3f1eb;
-  --surface: #fffefa;
-  --line: #dedbd2;
-  --accent: #c33b2d;
-  --accent-dark: #9c2c22;
-  --taxi: #f0bf50;
-  --night: #182126;
-  --radius: 16px;
-  --font: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --ink: #171719;
+  --muted: #68666a;
+  --paper: #f4f0e7;
+  --surface: #fffdf7;
+  --line: #d8d1c2;
+  --accent: #e41e32;
+  --accent-dark: #b70f21;
+  --taxi: #ffd21f;
+  --night: #11121a;
+  --radius: 12px;
+  --font: Impact, Haettenschweiler, "Arial Narrow Bold", "Segoe UI", sans-serif;
 }
 
 * { box-sizing: border-box; }
@@ -19,8 +19,12 @@ html { scroll-behavior: smooth; }
 body {
   margin: 0;
   color: var(--ink);
-  background: var(--paper);
-  font-family: var(--font);
+  background:
+    linear-gradient(rgba(25, 24, 31, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(25, 24, 31, 0.018) 1px, transparent 1px),
+    var(--paper);
+  background-size: 5px 5px, 5px 5px, auto;
+  font-family: "Segoe UI", Arial, sans-serif;
   line-height: 1.6;
 }
 
@@ -40,26 +44,50 @@ a:focus-visible, button:focus-visible, input:focus-visible {
   justify-content: space-between;
   gap: 24px;
   padding: 16px max(24px, calc((100vw - 1160px) / 2));
-  background: rgba(255, 254, 250, 0.97);
-  border-bottom: 3px solid var(--taxi);
+  background: rgba(255, 253, 247, 0.98);
+  border-bottom: 4px solid var(--ink);
 }
 
 .brand, .footer-brand {
   color: var(--ink);
-  font-size: 1.13rem;
-  font-weight: 800;
-  letter-spacing: -0.04em;
+  font-family: var(--font);
+  font-size: 1.28rem;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
   text-decoration: none;
 }
 
 .brand::before {
   display: inline-block;
-  width: 9px;
-  height: 9px;
-  margin: 0 9px 1px 0;
+  width: 12px;
+  height: 12px;
+  margin: 0 9px 2px 0;
+  border: 3px solid var(--surface);
   border-radius: 50%;
   background: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent);
   content: "";
+}
+
+.broadcast-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.broadcast-status-live {
+  padding: 4px 8px;
+  border-radius: 3px;
+  color: white;
+  background: var(--accent);
+  box-shadow: 0 2px 0 #8e0b1a;
 }
 
 .primary-nav, .footer-nav {
@@ -84,8 +112,8 @@ a:focus-visible, button:focus-visible, input:focus-visible {
 }
 
 .primary-nav a[aria-current="page"] {
-  color: #242323;
-  background: #f7e5b6;
+  color: #fff;
+  background: var(--ink);
 }
 
 main {
@@ -98,8 +126,36 @@ main {
 h1, h2, h3, p { margin-top: 0; }
 
 h1, h2, h3 {
+  font-family: var(--font);
   line-height: 1.15;
   letter-spacing: -0.035em;
+  text-transform: uppercase;
+}
+
+.broadcast-ticker {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 10px;
+  padding: 9px 14px;
+  border: 2px solid var(--ink);
+  color: var(--ink);
+  background: var(--taxi);
+  font-size: 0.72rem;
+  font-weight: 850;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+.broadcast-ticker strong {
+  text-align: center;
+  font-size: 0.82rem;
+}
+
+.broadcast-ticker span:last-child {
+  text-align: right;
 }
 
 .hero {
@@ -110,12 +166,14 @@ h1, h2, h3 {
   align-items: center;
   overflow: hidden;
   padding: clamp(32px, 6vw, 76px);
-  border-radius: 24px;
+  border: 3px solid var(--ink);
+  border-radius: 18px;
   color: #fffefa;
   background:
-    radial-gradient(ellipse at 81% 17%, rgba(240, 191, 80, 0.25), transparent 30%),
-    radial-gradient(ellipse at 8% 88%, rgba(195, 59, 45, 0.2), transparent 34%),
-    linear-gradient(125deg, var(--night) 10%, #222b30 72%, #30302d);
+    radial-gradient(ellipse at 82% 18%, rgba(255, 210, 31, 0.34), transparent 23%),
+    radial-gradient(ellipse at 18% 72%, rgba(228, 30, 50, 0.24), transparent 28%),
+    linear-gradient(125deg, #090a12 5%, #1d2030 58%, #34354a);
+  box-shadow: 8px 8px 0 var(--ink);
 }
 
 .hero::after {
@@ -166,8 +224,10 @@ h1, h2, h3 {
 .hero h1 {
   max-width: 650px;
   margin: 0 0 20px;
+  font-family: var(--font);
   font-size: clamp(2.55rem, 5vw, 4.65rem);
   line-height: 1.02;
+  text-transform: uppercase;
 }
 
 .lead {
@@ -231,12 +291,16 @@ h1, h2, h3 {
   flex-direction: column;
   justify-content: center;
   padding: 35px;
-  border: 1px solid rgba(240, 191, 80, 0.55);
-  border-radius: 12px;
+  border: 8px solid #090a0f;
+  border-radius: 18px;
   background:
-    radial-gradient(ellipse at 50% 0%, rgba(240, 191, 80, 0.2), transparent 55%),
-    linear-gradient(150deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.015));
-  box-shadow: 0 0 36px rgba(240, 191, 80, 0.1), inset 0 0 22px rgba(240, 191, 80, 0.06);
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.035) 0 2px, transparent 2px 5px),
+    radial-gradient(ellipse at 50% 0%, rgba(255, 210, 31, 0.28), transparent 55%),
+    linear-gradient(150deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.015));
+  box-shadow:
+    0 0 0 2px #b9b6aa,
+    0 18px 40px rgba(0, 0, 0, 0.38),
+    inset 0 0 30px rgba(0, 0, 0, 0.65);
   text-align: center;
 }
 
@@ -280,7 +344,7 @@ h1, h2, h3 {
 
 .home-section-nav a {
   padding: 8px 13px;
-  border: 1px solid var(--line);
+  border: 2px solid var(--ink);
   border-radius: 999px;
   color: var(--ink);
   background: var(--surface);
@@ -290,8 +354,9 @@ h1, h2, h3 {
 }
 
 .home-section-nav a:hover {
-  border-color: #d7b453;
-  background: #f8edcf;
+  border-color: var(--accent);
+  color: white;
+  background: var(--accent);
 }
 
 .home-section { padding-top: 68px; }
@@ -304,7 +369,9 @@ h1, h2, h3 {
 
 .section-heading h2 {
   margin-bottom: 10px;
+  font-family: var(--font);
   font-size: clamp(1.8rem, 3vw, 2.45rem);
+  text-transform: uppercase;
 }
 
 .section-heading > p:last-child { color: var(--muted); }
@@ -322,9 +389,10 @@ h1, h2, h3 {
   gap: clamp(24px, 5vw, 58px);
   align-items: center;
   padding: clamp(22px, 4vw, 42px);
-  border: 1px solid var(--line);
+  border: 3px solid var(--ink);
   border-radius: var(--radius);
   background: var(--surface);
+  box-shadow: 7px 7px 0 #d8d1c2;
 }
 
 .episode-art {
@@ -335,7 +403,7 @@ h1, h2, h3 {
   justify-content: center;
   gap: 10px;
   overflow: hidden;
-  border: 1px solid rgba(240, 191, 80, 0.45);
+  border: 6px solid var(--ink);
   border-radius: 12px;
   color: #fff8e8;
   background:
@@ -384,7 +452,7 @@ h1, h2, h3 {
 
 .ranking-panel {
   padding: 24px;
-  border: 1px solid #343c3e;
+  border: 3px solid var(--ink);
   border-radius: var(--radius);
   color: #f7f3e8;
   background:
@@ -435,6 +503,8 @@ h1, h2, h3 {
   display: flex;
   min-height: 280px;
   flex-direction: column;
+  border: 2px solid var(--ink);
+  box-shadow: 5px 5px 0 #d8d1c2;
 }
 
 .ranking-card:nth-child(4) { grid-column: 2 / span 2; }
@@ -488,7 +558,9 @@ h1, h2, h3 {
 
 .page-intro h1 {
   margin: 0 0 13px;
+  font-family: var(--font);
   font-size: clamp(2.25rem, 4.5vw, 3.5rem);
+  text-transform: uppercase;
 }
 
 .muted { color: var(--muted); }
@@ -671,7 +743,7 @@ h1, h2, h3 {
 
 .episode-table th {
   color: #fffefa;
-  background: var(--night);
+  background: var(--accent);
   font-size: 0.82rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -781,7 +853,7 @@ h1, h2, h3 {
   align-items: center;
   gap: 20px;
   padding: 22px max(24px, calc((100vw - 1160px) / 2));
-  border-top: 3px solid var(--taxi);
+  border-top: 5px solid var(--accent);
   color: #f5f1e7;
   background: var(--night);
 }
@@ -815,6 +887,10 @@ h1, h2, h3 {
   .site-header { flex-wrap: wrap; gap: 10px; padding: 12px 16px; }
   .brand { font-size: 1rem; white-space: nowrap; }
   .brand::before { margin-right: 6px; }
+  .broadcast-status { display: none; }
+  .broadcast-ticker { grid-template-columns: 1fr auto; font-size: 0.62rem; }
+  .broadcast-ticker strong { text-align: left; }
+  .broadcast-ticker span:last-child { display: none; }
   .primary-nav { flex-wrap: wrap; justify-content: flex-end; gap: 0; }
   .primary-nav a { padding: 6px 8px; font-size: 0.78rem; }
   main { width: calc(100% - 32px); padding: 20px 0 50px; }
