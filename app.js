@@ -39,6 +39,7 @@
   if (!favoriteState || typeof favoriteState !== "object" || Array.isArray(favoriteState)) {
     favoriteState = {};
   }
+  const myListsSearchQueries = {};
 
   // ----------------------------------------------------------
   // 2. Put the startup's name and pitch on the page.
@@ -607,7 +608,7 @@
     });
   }
 
-  function makeMyListCategory(category, entries) {
+  function makeMyListCategory(category) {
     const card = document.createElement("article");
     card.className = "card my-list-category";
 
@@ -623,9 +624,84 @@
     categoryLink.textContent = "Browse ranking →";
     heading.append(title, categoryLink);
 
+    const searchLabel = document.createElement("label");
+    searchLabel.className = "my-list-search";
+    const searchCaption = document.createElement("span");
+    searchCaption.textContent = "Search to add to " + category.title;
+    const searchInput = document.createElement("input");
+    searchInput.type = "search";
+    searchInput.id = "my-list-search-" + category.id;
+    searchInput.placeholder = "Search " + category.title.toLowerCase();
+    searchInput.value = myListsSearchQueries[category.id] || "";
+    searchLabel.append(searchCaption, searchInput);
+
+    const searchResults = document.createElement("ul");
+    searchResults.className = "my-list-search-results";
+    searchResults.setAttribute("aria-live", "polite");
+
+    function renderSearchResults() {
+      const query = searchInput.value.trim().toLowerCase();
+      searchResults.hidden = !query;
+      if (!query) {
+        searchResults.replaceChildren();
+        return;
+      }
+
+      const matches = getRankingEntries(category).filter(function (entry) {
+        return entry.name.toLowerCase().indexOf(query) !== -1;
+      }).sort(function (first, second) {
+        return second.votes - first.votes || first.name.localeCompare(second.name);
+      });
+
+      if (matches.length === 0) {
+        const emptyResult = document.createElement("li");
+        emptyResult.className = "my-list-search-empty";
+        emptyResult.textContent = "No options match this search.";
+        searchResults.replaceChildren(emptyResult);
+        return;
+      }
+
+      const resultItems = matches.map(function (entry) {
+        const item = document.createElement("li");
+        item.className = "my-list-item";
+
+        const name = document.createElement("span");
+        name.className = "my-list-item-name";
+        name.textContent = entry.name;
+
+        const toggleButton = document.createElement("button");
+        const isFavorite = isRankingFavorite(category, entry.id);
+        toggleButton.type = "button";
+        toggleButton.className = isFavorite
+          ? "button secondary my-list-toggle-button is-active"
+          : "button secondary my-list-toggle-button";
+        toggleButton.textContent = isFavorite ? "Added" : "Add to list";
+        toggleButton.setAttribute("aria-pressed", isFavorite ? "true" : "false");
+        toggleButton.setAttribute("aria-label", (isFavorite ? "Remove " : "Add ") + entry.name +
+          (isFavorite ? " from " : " to ") + category.title);
+        toggleButton.addEventListener("click", function () {
+          toggleRankingFavorite(category, entry.id, true);
+        });
+
+        item.append(name, toggleButton);
+        return item;
+      });
+      searchResults.replaceChildren.apply(searchResults, resultItems);
+    }
+
+    searchInput.addEventListener("input", function () {
+      myListsSearchQueries[category.id] = searchInput.value;
+      renderSearchResults();
+    });
+
+    const savedHeading = document.createElement("h3");
+    savedHeading.className = "my-list-saved-heading";
+    savedHeading.textContent = "Saved favorites";
+
     const list = document.createElement("ul");
     list.className = "my-list-items";
-    entries.forEach(function (entry) {
+    const favoriteEntries = getFavoriteEntries(category);
+    favoriteEntries.forEach(function (entry) {
       const item = document.createElement("li");
       item.className = "my-list-item";
 
@@ -633,34 +709,34 @@
       name.className = "my-list-item-name";
       name.textContent = entry.name;
 
-      const toggleButton = document.createElement("button");
-      const isFavorite = isRankingFavorite(category, entry.id);
-      toggleButton.type = "button";
-      toggleButton.className = isFavorite
-        ? "button secondary my-list-toggle-button is-active"
-        : "button secondary my-list-toggle-button";
-      toggleButton.textContent = isFavorite ? "Added" : "Add to list";
-      toggleButton.setAttribute("aria-pressed", isFavorite ? "true" : "false");
-      toggleButton.setAttribute("aria-label", (isFavorite ? "Remove " : "Add ") + entry.name +
-        (isFavorite ? " from " : " to ") + category.title);
-      toggleButton.addEventListener("click", function () {
+      const removeButton = document.createElement("button");
+      removeButton.type = "button";
+      removeButton.className = "button secondary my-list-remove-button";
+      removeButton.textContent = "Remove";
+      removeButton.setAttribute("aria-label", "Remove " + entry.name + " from " + category.title);
+      removeButton.addEventListener("click", function () {
         toggleRankingFavorite(category, entry.id, true);
       });
 
-      item.append(name, toggleButton);
+      item.append(name, removeButton);
       list.append(item);
     });
 
-    card.append(heading, list);
+    if (favoriteEntries.length === 0) {
+      const emptyList = document.createElement("li");
+      emptyList.className = "my-list-empty";
+      emptyList.textContent = "No saved favorites in this list yet.";
+      list.append(emptyList);
+    }
+
+    card.append(heading, searchLabel, searchResults, savedHeading, list);
+    renderSearchResults();
     return card;
   }
 
   function renderMyLists(feedbackMessage) {
     const groups = RANKING_CATEGORIES.map(function (category) {
-      const entries = getRankingEntries(category).sort(function (first, second) {
-        return second.votes - first.votes || first.name.localeCompare(second.name);
-      });
-      return makeMyListCategory(category, entries);
+      return makeMyListCategory(category);
     });
     const hasFavorites = RANKING_CATEGORIES.some(function (category) {
       return getFavoriteEntries(category).length > 0;
@@ -709,6 +785,10 @@
     const successMessage = wasSaved ? "Favorite removed from My Lists." : "Favorite saved to My Lists.";
     if (fromMyLists) {
       renderMyLists(successMessage);
+      const searchInput = document.getElementById("my-list-search-" + category.id);
+      if (searchInput) {
+        searchInput.focus();
+      }
     } else {
       renderRankingCategory(category, successMessage);
       renderMyLists();
