@@ -11,7 +11,11 @@
 <body>
 
   <header class="site-header">
-    <a class="brand" href="#home" id="brand-name" aria-label="SNL Archive home">SNL Archive</a>
+    <a class="brand" href="#home" id="brand-name" aria-label="SNL Archive home"><span>SNL</span> Archive</a>
+    <div class="broadcast-status" aria-label="Archive broadcast status">
+      <span class="broadcast-status-live">Live</span>
+      <span>Season 52</span>
+    </div>
     <nav class="primary-nav" aria-label="Main navigation">
       <a href="#home">Home</a>
       <a href="#explore">Explore</a>
@@ -24,10 +28,15 @@
 
   <main>
     <section id="home" data-view aria-labelledby="tagline">
+      <div class="broadcast-ticker" aria-label="Archive channel information">
+        <span><b>ON AIR</b> Channel 50</span>
+        <strong>Live from New York</strong>
+        <span>30 Rockefeller Plaza · 11:30 PM</span>
+      </div>
       <div class="hero">
         <div class="hero-copy">
-          <p class="eyebrow"><span class="live-dot" aria-hidden="true"></span> Welcome to the archive</p>
-          <h1 id="tagline">SNL Archive: The ultimate library of laughs.</h1>
+          <p class="eyebrow"><span class="live-dot" aria-hidden="true"></span> Studio 8H · Archive feed</p>
+          <h1 id="tagline">Live from New York. Forever.</h1>
           <p class="lead" id="pitch">
             Welcome to SNL Archive, a fan-made place to discover episode spotlights,
             revisit sketches, and explore sample fan rankings.
@@ -50,7 +59,7 @@
       <nav class="home-section-nav" aria-label="Homepage sections">
         <a href="#featured-episode">Featured episode</a>
         <a href="#popular-sketches">Popular sketches</a>
-        <a href="#fan-rankings">Fan rankings</a>
+        <a href="#rankings">Rankings</a>
         <a href="#explore">Explore all topics</a>
         <a href="#episodes">Search episodes</a>
         <a href="#cast">Cast &amp; writers</a>
@@ -76,7 +85,7 @@
             <p id="featured-episode-description">A neighborhood theater's last screening turns into an unexpected live show when the audience keeps calling for one more encore.</p>
             <a class="card-link" href="#explore">Explore episode topics <span aria-hidden="true">→</span></a>
           </div>
-        </div>
+        </article>
       </section>
 
       <section class="home-section" id="popular-sketches" aria-labelledby="popular-sketches-heading">
@@ -95,6 +104,15 @@
             <a class="card-link" href="#explore">Explore more topics <span aria-hidden="true">→</span></a>
           </aside>
         </div>
+      </section>
+
+      <section class="home-section" id="rankings" aria-labelledby="rankings-heading">
+        <div class="section-heading">
+          <p class="eyebrow">The archive leaderboard</p>
+          <h2 id="rankings-heading">Rankings</h2>
+          <p>Explore five fan-favorite lists across sketches, performers, guests, and news anchors.</p>
+        </div>
+        <div class="rankings-grid" id="rankings-grid"></div>
       </section>
     </section>
 

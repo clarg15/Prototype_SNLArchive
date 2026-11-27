@@ -13,31 +13,64 @@
 
 const STARTUP = {
   name: "SNL Archive",
-  tagline: "SNL Archive: The ultimate library of laughs.",
-  pitch: "Welcome to SNL Archive, a fan-made place to discover episode spotlights, revisit sketches, and explore sample fan rankings."
+  tagline: "Rewind. Laugh. Rank",
+  pitch: "Your seat in the fandom—revisit classic sketches, explore every episode, and keep the late-night conversation going."
 };
 
 const FEATURED_EPISODE = {
-  label: "Fictional prototype spotlight",
-  title: "The Midnight Matinee",
-  description: "A neighborhood theater's last screening turns into an unexpected live show when the audience keeps calling for one more encore."
+  label: "Season 52, Episode 7",
+  title: "Amanda Seyfried",
+  description: "December 5, 2026 · Live from Studio 8H."
 };
 
 const POPULAR_SKETCHES = [
   {
     rank: 1,
-    title: "The 2 A.M. Bodega",
-    description: "A night-shift shopkeeper tries to keep up with increasingly unusual customers."
+    title: "More Cowbell",
+    description: "Will Ferrell and Christopher Walken star in a fictionalized studio session for Blue Öyster Cult's 'Don't Fear the Reaper'."
   },
   {
     rank: 2,
-    title: "Subway Small Talk",
-    description: "Two strangers' polite conversation takes a wild turn before the next stop."
+    title: "Matt Foley: Down by the River",
+    description: "Chris Farley plays an intense motivational speaker warning two teens about living in a van down by the river."
   },
   {
     rank: 3,
-    title: "The Last Train Home",
-    description: "A group of commuters make a bold plan when the train is delayed again."
+    title: "Celebrity Jeopardy!",
+    description: "Norm Macdonald's deadpan Burt Reynolds clashes with Will Ferrell's Alex Trebek and chaotic celebrity contestants."
+  }
+];
+
+const RANKING_CATEGORIES = [
+  {
+    title: "Best sketches of all time",
+    link: "#popular-sketches",
+    linkText: "View popular sketches",
+    entries: ["More Cowbell", "Celebrity Jeopardy", "Debbie Downer"]
+  },
+  {
+    title: "Cast members",
+    link: "#cast",
+    linkText: "Explore cast & writers",
+    entries: ["Kate McKinnon", "Will Ferrell", "Bill Murray"]
+  },
+  {
+    title: "Hosts",
+    link: "#episodes",
+    linkText: "Explore episodes",
+    entries: ["Steve Martin", "Alec Baldwin", "John Goodman"]
+  },
+  {
+    title: "Musical Guests",
+    link: "#episodes",
+    linkText: "Search musical guests",
+    entries: ["Prince", "David Bowie", "Beyonce"]
+  },
+  {
+    title: "Weekend Update anchors",
+    link: "#cast",
+    linkText: "Explore the archive",
+    entries: ["Norm Macdonald", "Colin Jost", "Seth Meyers"]
   }
 ];
 

@@ -216,6 +216,7 @@
 
   const popularSketchGrid = document.getElementById("popular-sketch-grid");
   const fanRankingList = document.getElementById("fan-ranking-list");
+  const rankingsGrid = document.getElementById("rankings-grid");
   const peopleDatabaseBody = document.getElementById("people-database-body");
   const peopleSearchBox = document.getElementById("people-search-box");
   const peopleRoleFilter = document.getElementById("people-role-filter");
@@ -306,6 +307,39 @@
     return row;
   }
 
+  function makeRankingCard(category) {
+    const card = document.createElement("article");
+    card.className = "card ranking-card";
+
+    const title = document.createElement("h3");
+    title.textContent = category.title;
+
+    const list = document.createElement("ol");
+    list.className = "category-ranking-list";
+    category.entries.forEach(function (entry, index) {
+      const item = document.createElement("li");
+
+      const rank = document.createElement("span");
+      rank.className = "category-ranking-number";
+      rank.textContent = String(index + 1).padStart(2, "0");
+
+      const name = document.createElement("span");
+      name.textContent = entry;
+
+      item.append(rank, name);
+      list.append(item);
+    });
+
+    const link = document.createElement("a");
+    link.className = "card-link";
+    link.href = category.link;
+    link.textContent = category.linkText + " →";
+    link.setAttribute("aria-label", category.linkText + ": " + category.title);
+
+    card.append(title, list, link);
+    return card;
+  }
+
   function renderPeopleDatabase() {
     const query = peopleSearchBox.value.trim().toLowerCase();
     const selectedRole = peopleRoleFilter.value;
@@ -348,6 +382,7 @@
 
   popularSketchGrid.replaceChildren.apply(popularSketchGrid, POPULAR_SKETCHES.map(makeSketchCard));
   fanRankingList.replaceChildren.apply(fanRankingList, POPULAR_SKETCHES.map(makeRankingItem));
+  rankingsGrid.replaceChildren.apply(rankingsGrid, RANKING_CATEGORIES.map(makeRankingCard));
   for (let seasonNumber = 1; seasonNumber <= 52; seasonNumber += 1) {
     const option = document.createElement("option");
     option.value = String(seasonNumber);
