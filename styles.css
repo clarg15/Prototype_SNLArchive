@@ -723,9 +723,20 @@ h1, h2, h3 {
   font-weight: 700;
 }
 
-.my-list-remove-button {
+.my-list-toggle-button {
   flex: 0 0 auto;
-  min-width: 84px;
+  min-width: 112px;
+}
+
+.my-list-toggle-button.is-active {
+  border-color: var(--taxi);
+  color: var(--taxi);
+  background: #292416;
+}
+
+.my-list-toggle-button.is-active:hover {
+  color: #090b12;
+  background: var(--taxi);
 }
 
 .ranking-add-form {
