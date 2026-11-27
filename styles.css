@@ -665,6 +665,69 @@ h1, h2, h3 {
   background: var(--taxi);
 }
 
+.ranking-favorite-button.is-active {
+  border-color: var(--taxi);
+  color: var(--taxi);
+  background: #292416;
+}
+
+.ranking-favorite-button.is-active:hover {
+  color: #090b12;
+  background: var(--taxi);
+}
+
+.my-lists-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.my-list-category {
+  padding: 22px;
+}
+
+.my-list-category-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.my-list-category-heading h2 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.my-list-category-heading .card-link {
+  flex: 0 0 auto;
+  font-size: 0.88rem;
+}
+
+.my-list-items {
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.my-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+}
+
+.my-list-item-name {
+  overflow-wrap: anywhere;
+  font-weight: 700;
+}
+
+.my-list-remove-button {
+  flex: 0 0 auto;
+  min-width: 84px;
+}
+
 .ranking-add-form {
   margin-top: 20px;
   padding-top: 22px;
@@ -1188,6 +1251,7 @@ h1, h2, h3 {
   .popular-layout { grid-template-columns: 1fr; }
   .sketch-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
   .rankings-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .my-lists-grid { grid-template-columns: 1fr; }
   .ranking-card { grid-column: auto; }
   .site-footer { grid-template-columns: 1fr auto; }
   .site-footer p { grid-column: 1 / -1; grid-row: 2; }
@@ -1221,11 +1285,12 @@ h1, h2, h3 {
   .sketch-database-grid { grid-template-columns: 1fr; }
   .sketch-grid { grid-template-columns: 1fr; }
   .rankings-grid { grid-template-columns: 1fr; }
+  .my-lists-grid { grid-template-columns: 1fr; }
   .interactive-ranking-item {
     grid-template-columns: 32px minmax(0, 1fr);
     gap: 8px;
   }
-  .ranking-vote-controls { grid-column: 2; justify-content: space-between; }
+  .ranking-vote-controls { grid-column: 2; justify-content: flex-start; flex-wrap: wrap; }
   .ranking-add-controls { grid-template-columns: 1fr; }
   .sketch-dialog-cast li { flex-direction: column; gap: 4px; }
   .sketch-dialog-cast li span { text-align: left; }

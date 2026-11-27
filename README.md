@@ -77,7 +77,7 @@ Copy one, fill in the blanks, and send it:
 
 Real logins, real databases, real payments, real AI features, emails and texts all need servers, security and paid services. If you ask for them, Copilot will offer to **fake** them instead (for example, a checkout page that shows a pretend confirmation). That's the right answer for a prototype. Add the real version to the *"What a real version would need"* list in your project log — it's part of your grade.
 
-Fan ranking votes and added options are saved only in the visitor's browser; they are not shared between visitors. Shared rankings would need a real backend and database.
+Fan ranking votes, added options, and My Lists favorites are saved only in the visitor's browser; they are not shared between visitors. Shared rankings and lists would need a real backend and database.
 
 ## Step 5 — Save a checkpoint (commit) every time something works
 
