@@ -633,16 +633,21 @@
       name.className = "my-list-item-name";
       name.textContent = entry.name;
 
-      const removeButton = document.createElement("button");
-      removeButton.type = "button";
-      removeButton.className = "button secondary my-list-remove-button";
-      removeButton.textContent = "Remove";
-      removeButton.setAttribute("aria-label", "Remove " + entry.name + " from My Lists");
-      removeButton.addEventListener("click", function () {
+      const toggleButton = document.createElement("button");
+      const isFavorite = isRankingFavorite(category, entry.id);
+      toggleButton.type = "button";
+      toggleButton.className = isFavorite
+        ? "button secondary my-list-toggle-button is-active"
+        : "button secondary my-list-toggle-button";
+      toggleButton.textContent = isFavorite ? "Added" : "Add to list";
+      toggleButton.setAttribute("aria-pressed", isFavorite ? "true" : "false");
+      toggleButton.setAttribute("aria-label", (isFavorite ? "Remove " : "Add ") + entry.name +
+        (isFavorite ? " from " : " to ") + category.title);
+      toggleButton.addEventListener("click", function () {
         toggleRankingFavorite(category, entry.id, true);
       });
 
-      item.append(name, removeButton);
+      item.append(name, toggleButton);
       list.append(item);
     });
 
@@ -652,12 +657,17 @@
 
   function renderMyLists(feedbackMessage) {
     const groups = RANKING_CATEGORIES.map(function (category) {
-      const entries = getFavoriteEntries(category);
-      return entries.length ? makeMyListCategory(category, entries) : null;
-    }).filter(Boolean);
+      const entries = getRankingEntries(category).sort(function (first, second) {
+        return second.votes - first.votes || first.name.localeCompare(second.name);
+      });
+      return makeMyListCategory(category, entries);
+    });
+    const hasFavorites = RANKING_CATEGORIES.some(function (category) {
+      return getFavoriteEntries(category).length > 0;
+    });
 
     myListsGroups.replaceChildren.apply(myListsGroups, groups);
-    myListsEmpty.hidden = groups.length > 0;
+    myListsEmpty.hidden = hasFavorites;
     myListsFeedback.textContent = feedbackMessage || "";
   }
 
