@@ -61,7 +61,7 @@ Copy one, fill in the blanks, and send it:
 
 > Our startup idea is: **[one sentence]**. Our customers are **[who]**, and the problem we solve is **[problem]**. Update `data.js` and the text in `index.html` so the site describes our startup. Don't change the layout yet.
 
-> Replace the sample listings in `data.js` with 8 realistic but fake examples that fit our startup.
+> Replace the sample ranking options in `data.js` with 8 realistic but fake examples that fit our startup.
 
 > Add a page that shows how our product gets more valuable as more people use it. Use fake numbers so we can compare 10 users with 10,000 users.
 
@@ -76,6 +76,8 @@ Copy one, fill in the blanks, and send it:
 ### What Copilot can't do here (on purpose)
 
 Real logins, real databases, real payments, real AI features, emails and texts all need servers, security and paid services. If you ask for them, Copilot will offer to **fake** them instead (for example, a checkout page that shows a pretend confirmation). That's the right answer for a prototype. Add the real version to the *"What a real version would need"* list in your project log — it's part of your grade.
+
+Fan ranking votes and added options are saved only in the visitor's browser; they are not shared between visitors. Shared rankings would need a real backend and database.
 
 ## Step 5 — Save a checkpoint (commit) every time something works
 
@@ -135,7 +137,7 @@ That link is your live site. Every commit updates it automatically within a few 
 |---|---|
 | `index.html` | The structure and text of your site |
 | `styles.css` | How it looks: colours, fonts, spacing |
-| `data.js` | Fake sample content for the homepage and Explore page |
+| `data.js` | Homepage content and sample fan-ranking options and vote totals |
 | `episodes.js` | Aired episode numbers, dates, hosts, and musical guests for seasons 1–52; compiled from Wikipedia episode tables, with TVmaze entries for three SNL at Home broadcasts |
 | `people.js` | A static snapshot of 174 listed cast members and 313 unique season-by-season writers, merged where people held both roles |
 | `app.js` | What the site *does* when people click things |

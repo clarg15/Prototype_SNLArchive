@@ -8,9 +8,8 @@
   "use strict";
 
   // ----------------------------------------------------------
-  // 1. Saving things in the browser (localStorage).
-  //    This only remembers things on THIS browser on THIS device.
-  //    Your teammates and your customers will NOT see it.
+  // 1. Saving ranking changes in this browser (localStorage).
+  //    These votes and options are not shared with other visitors.
   //    A real product would need a server and a database for that.
   // ----------------------------------------------------------
   const storage = {
@@ -25,13 +24,17 @@
     set: function (key, value) {
       try {
         localStorage.setItem(key, JSON.stringify(value));
+        return true;
       } catch (error) {
-        // storage blocked (e.g. private window): ignore
+        return false;
       }
     }
   };
 
-  let savedIds = storage.get("savedIds", []);
+  let rankingState = storage.get("fanRankings", {});
+  if (!rankingState || typeof rankingState !== "object" || Array.isArray(rankingState)) {
+    rankingState = {};
+  }
 
   // ----------------------------------------------------------
   // 2. Put the startup's name and pitch on the page.
@@ -223,6 +226,13 @@
   const peopleSeasonFilter = document.getElementById("people-season-filter");
   const peopleResultCount = document.getElementById("people-result-count");
   const peopleEmptyMessage = document.getElementById("people-empty-message");
+  const rankingCategoryNav = document.getElementById("ranking-category-nav");
+  const rankingCategoryTitle = document.getElementById("ranking-category-title");
+  const rankingCategoryLabel = document.getElementById("ranking-category-label");
+  const rankingOptionList = document.getElementById("ranking-option-list");
+  const rankingAddForm = document.getElementById("ranking-add-form");
+  const rankingOptionInput = document.getElementById("ranking-option-input");
+  const rankingFeedback = document.getElementById("ranking-feedback");
 
   function makeSketchCard(sketch) {
     const card = document.createElement("article");
@@ -307,6 +317,35 @@
     return row;
   }
 
+  let activeRankingCategory = RANKING_CATEGORIES[0];
+
+  function getRankingEntries(category) {
+    const storedEntries = rankingState[category.id];
+    if (Array.isArray(storedEntries)) {
+      return storedEntries.filter(function (entry) {
+        return entry && typeof entry.id === "string" &&
+          typeof entry.name === "string" && entry.name.trim() &&
+          Number.isFinite(entry.votes) && entry.votes >= 0;
+      }).map(function (entry) {
+        return {
+          id: entry.id,
+          name: entry.name,
+          votes: Math.floor(entry.votes),
+          userVoted: entry.userVoted === true
+        };
+      });
+    }
+
+    return category.entries.map(function (entry, index) {
+      return {
+        id: category.id + "-seed-" + index,
+        name: entry.name,
+        votes: entry.votes,
+        userVoted: false
+      };
+    });
+  }
+
   function makeRankingCard(category) {
     const card = document.createElement("article");
     card.className = "card ranking-card";
@@ -316,29 +355,151 @@
 
     const list = document.createElement("ol");
     list.className = "category-ranking-list";
-    category.entries.forEach(function (entry, index) {
-      const item = document.createElement("li");
+    getRankingEntries(category)
+      .sort(function (first, second) {
+        return second.votes - first.votes || first.name.localeCompare(second.name);
+      })
+      .slice(0, 3)
+      .forEach(function (entry, index) {
+        const item = document.createElement("li");
 
-      const rank = document.createElement("span");
-      rank.className = "category-ranking-number";
-      rank.textContent = String(index + 1).padStart(2, "0");
+        const rank = document.createElement("span");
+        rank.className = "category-ranking-number";
+        rank.textContent = String(index + 1).padStart(2, "0");
 
-      const name = document.createElement("span");
-      name.textContent = entry;
+        const name = document.createElement("span");
+        name.textContent = entry.name;
 
-      item.append(rank, name);
-      list.append(item);
-    });
+        const votes = document.createElement("span");
+        votes.className = "category-ranking-votes";
+        votes.textContent = entry.votes + (entry.votes === 1 ? " vote" : " votes");
+
+        item.append(rank, name, votes);
+        list.append(item);
+      });
 
     const link = document.createElement("a");
     link.className = "card-link";
-    link.href = category.link;
-    link.textContent = category.linkText + " →";
-    link.setAttribute("aria-label", category.linkText + ": " + category.title);
+    link.href = "#rankings-" + category.id;
+    link.textContent = "View ranking →";
+    link.setAttribute("aria-label", "View fan ranking for " + category.title);
 
     card.append(title, list, link);
     return card;
   }
+
+  function renderHomeRankingCards() {
+    rankingsGrid.replaceChildren.apply(rankingsGrid, RANKING_CATEGORIES.map(makeRankingCard));
+  }
+
+  function renderRankingCategory(category, feedbackMessage) {
+    activeRankingCategory = category;
+    rankingCategoryTitle.textContent = category.title;
+    rankingCategoryLabel.textContent = category.title.toLowerCase();
+    rankingFeedback.textContent = feedbackMessage || "";
+
+    rankingCategoryNav.replaceChildren.apply(rankingCategoryNav, RANKING_CATEGORIES.map(function (item) {
+      const link = document.createElement("a");
+      link.href = "#rankings-" + item.id;
+      link.textContent = item.title;
+      if (item.id === category.id) {
+        link.setAttribute("aria-current", "page");
+      }
+      return link;
+    }));
+
+    const rankingItems = getRankingEntries(category)
+      .sort(function (first, second) {
+        return second.votes - first.votes || first.name.localeCompare(second.name);
+      })
+      .map(function (entry, index) {
+        const item = document.createElement("li");
+        item.className = "interactive-ranking-item";
+
+        const position = document.createElement("span");
+        position.className = "interactive-ranking-position";
+        position.textContent = String(index + 1).padStart(2, "0");
+
+        const name = document.createElement("span");
+        name.className = "interactive-ranking-name";
+        name.textContent = entry.name;
+
+        const controls = document.createElement("div");
+        controls.className = "ranking-vote-controls";
+
+        const votes = document.createElement("span");
+        votes.className = "ranking-vote-count";
+        votes.textContent = entry.votes + (entry.votes === 1 ? " vote" : " votes");
+
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = entry.userVoted
+          ? "button secondary ranking-vote-button is-active"
+          : "button secondary ranking-vote-button";
+        button.textContent = entry.userVoted ? "Upvoted" : "Upvote";
+        button.setAttribute("aria-pressed", entry.userVoted ? "true" : "false");
+        button.setAttribute("aria-label", (entry.userVoted ? "Remove upvote from " : "Upvote ") + entry.name);
+        button.addEventListener("click", function () {
+          toggleRankingVote(category, entry.id);
+        });
+
+        controls.append(votes, button);
+        item.append(position, name, controls);
+        return item;
+      });
+
+    rankingOptionList.replaceChildren.apply(rankingOptionList, rankingItems);
+  }
+
+  function saveRankingEntries(category, entries, successMessage) {
+    rankingState[category.id] = entries;
+    renderHomeRankingCards();
+    const wasSaved = storage.set("fanRankings", rankingState);
+    renderRankingCategory(category, wasSaved
+      ? successMessage
+      : "This browser could not save your change. It will be lost when you leave this page.");
+  }
+
+  function toggleRankingVote(category, entryId) {
+    const entries = getRankingEntries(category);
+    const entry = entries.find(function (item) { return item.id === entryId; });
+    if (!entry) {
+      renderRankingCategory(category, "That option could not be found. Please refresh and try again.");
+      return;
+    }
+
+    if (entry.userVoted) {
+      entry.votes = Math.max(0, entry.votes - 1);
+      entry.userVoted = false;
+    } else {
+      entry.votes += 1;
+      entry.userVoted = true;
+    }
+    saveRankingEntries(category, entries, entry.userVoted ? "Your upvote was added." : "Your upvote was removed.");
+  }
+
+  rankingAddForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    const name = rankingOptionInput.value.trim();
+    if (!name) {
+      rankingFeedback.textContent = "Enter an option name.";
+      return;
+    }
+
+    const entries = getRankingEntries(activeRankingCategory);
+    if (entries.some(function (entry) { return entry.name.toLowerCase() === name.toLowerCase(); })) {
+      rankingFeedback.textContent = "That option is already on this list.";
+      return;
+    }
+
+    let id = activeRankingCategory.id + "-user-" + Date.now();
+    while (entries.some(function (entry) { return entry.id === id; })) {
+      id += "-new";
+    }
+    entries.push({ id: id, name: name, votes: 0, userVoted: false });
+    rankingOptionInput.value = "";
+    saveRankingEntries(activeRankingCategory, entries, "Your option was added to the ranking.");
+  });
 
   function renderPeopleDatabase() {
     const query = peopleSearchBox.value.trim().toLowerCase();
@@ -382,7 +543,7 @@
 
   popularSketchGrid.replaceChildren.apply(popularSketchGrid, POPULAR_SKETCHES.map(makeSketchCard));
   fanRankingList.replaceChildren.apply(fanRankingList, POPULAR_SKETCHES.map(makeRankingItem));
-  rankingsGrid.replaceChildren.apply(rankingsGrid, RANKING_CATEGORIES.map(makeRankingCard));
+  renderHomeRankingCards();
   for (let seasonNumber = 1; seasonNumber <= 52; seasonNumber += 1) {
     const option = document.createElement("option");
     option.value = String(seasonNumber);
@@ -398,6 +559,12 @@
   // ----------------------------------------------------------
   function showView() {
     const requested = (window.location.hash || "#home").slice(1);
+    const rankingCategoryId = requested.indexOf("rankings-") === 0
+      ? requested.slice("rankings-".length)
+      : null;
+    const rankingCategory = RANKING_CATEGORIES.find(function (category) {
+      return category.id === rankingCategoryId;
+    });
     const views = document.querySelectorAll("[data-view]");
     const matchingView = Array.prototype.find.call(views, function (view) {
       return view.id === requested;
@@ -413,18 +580,25 @@
     const isArchiveRoute = seasonExists || episode;
     const sectionTarget = !matchingView && !isArchiveRoute && document.getElementById(requested);
     const homeSectionTarget = sectionTarget && home.contains(sectionTarget) ? sectionTarget : null;
-    const current = matchingView
-      ? requested
-      : seasonExists
-        ? "season-page"
-        : episode
-          ? "episode-page"
-          : "home";
+    let current = "home";
+    if (matchingView) {
+      current = requested;
+    } else if (rankingCategory) {
+      current = "rankings";
+    } else if (seasonExists) {
+      current = "season-page";
+    } else if (episode) {
+      current = "episode-page";
+    }
 
     if (current === "season-page") {
       renderSeasonPage(seasonNumber);
     } else if (current === "episode-page") {
       renderEpisodePage(episodeSeasonNumber, episode);
+    } else if (current === "rankings") {
+      const category = rankingCategory || RANKING_CATEGORIES[0];
+      renderRankingCategory(category);
+      document.title = category.title + " Fan Rankings | " + STARTUP.name;
     } else if (current === "episodes") {
       renderEpisodeDatabase();
       document.title = "Episode Guide | " + STARTUP.name;
@@ -440,7 +614,7 @@
     });
 
     const activeNav = current === "season-page" || current === "episode-page" ? "seasons" : current;
-    document.querySelectorAll("nav a").forEach(function (link) {
+    document.querySelectorAll(".primary-nav a, .footer-nav a").forEach(function (link) {
       if (link.getAttribute("href") === "#" + activeNav) {
         link.setAttribute("aria-current", "page");
       } else {
@@ -458,72 +632,8 @@
   window.addEventListener("hashchange", showView);
 
   // ----------------------------------------------------------
-  // 4. Explore page: build one card per listing.
-  //    We use textContent (not innerHTML) so text is always shown
-  //    as text — a basic security habit.
-  // ----------------------------------------------------------
-  const grid = document.getElementById("listing-grid");
-  const searchBox = document.getElementById("search-box");
-  const emptyMessage = document.getElementById("empty-message");
-  const savedCount = document.getElementById("saved-count");
-
-  function makeCard(item) {
-    const card = document.createElement("article");
-    card.className = "card";
-
-    const tag = document.createElement("span");
-    tag.className = "tag";
-    tag.textContent = item.category;
-
-    const title = document.createElement("h2");
-    title.textContent = item.name;
-
-    const text = document.createElement("p");
-    text.textContent = item.description;
-
-    const isSaved = savedIds.indexOf(item.id) !== -1;
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "button secondary";
-    button.textContent = isSaved ? "Saved ✓" : "Save";
-    button.setAttribute("aria-pressed", isSaved ? "true" : "false");
-    button.addEventListener("click", function () {
-      toggleSaved(item.id);
-    });
-
-    card.append(tag, title, text, button);
-    return card;
-  }
-
-  function toggleSaved(id) {
-    if (savedIds.indexOf(id) === -1) {
-      savedIds.push(id);
-    } else {
-      savedIds = savedIds.filter(function (savedId) { return savedId !== id; });
-    }
-    storage.set("savedIds", savedIds);
-    renderListings();
-  }
-
-  function renderListings() {
-    const query = searchBox.value.trim().toLowerCase();
-    const matches = LISTINGS.filter(function (item) {
-      const text = (item.name + " " + item.category + " " + item.description).toLowerCase();
-      return text.indexOf(query) !== -1;
-    });
-
-    grid.replaceChildren.apply(grid, matches.map(makeCard));
-    emptyMessage.hidden = matches.length > 0;
-    savedCount.textContent = savedIds.length === 0
-      ? "Tap Save on anything you like."
-      : "You've saved " + savedIds.length + " item(s) on this device.";
-  }
-
-  searchBox.addEventListener("input", renderListings);
-
-  // ----------------------------------------------------------
   // 5. Start up.
   // ----------------------------------------------------------
-  renderListings();
+  renderHomeRankingCards();
   showView();
 })();
