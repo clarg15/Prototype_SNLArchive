@@ -703,6 +703,54 @@ h1, h2, h3 {
   font-size: 0.88rem;
 }
 
+.my-list-search {
+  display: block;
+  margin-top: 18px;
+}
+
+.my-list-search span {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 0.88rem;
+  font-weight: 750;
+}
+
+.my-list-search input {
+  width: 100%;
+  min-height: 44px;
+  padding: 9px 12px;
+  border: 1px solid #3b3e4d;
+  border-radius: 9px;
+  color: var(--ink);
+  background: #0b0e16;
+  font: inherit;
+}
+
+.my-list-search-results {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.my-list-search-results[hidden] { display: none; }
+
+.my-list-search-empty, .my-list-empty {
+  padding: 12px 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+.my-list-saved-heading {
+  margin: 20px 0 0;
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 750;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
 .my-list-items {
   margin: 16px 0 0;
   padding: 0;
@@ -737,6 +785,11 @@ h1, h2, h3 {
 .my-list-toggle-button.is-active:hover {
   color: #090b12;
   background: var(--taxi);
+}
+
+.my-list-remove-button {
+  flex: 0 0 auto;
+  min-width: 84px;
 }
 
 .ranking-add-form {
